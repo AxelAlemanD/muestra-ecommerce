@@ -35,11 +35,7 @@
             "assets": [
               "src/favicon.png",
               "src/assets",
-              {
-                "glob": "_redirects",
-                "input": "src",
-                "output": "/"
-              }
+              "src/_redirects"
             ],
             "styles": [
               "src/styles.scss",
