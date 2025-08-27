@@ -275,7 +275,7 @@ export class CheckoutPage implements OnDestroy {
 
     this._genericService.post<any>(`${HttpEntitiesEnum.PAYMENTS}/create-payment-intent`, {
       amount: this.cart?.total! * 100,
-      description: `Cliente ${this._authService.userId} - Casa Luca - Orden #${this.cart?.id}`
+      description: `Cliente ${this._authService.userId} - imvet - Orden #${this.cart?.id}`
     })
       .pipe(take(1))
       .subscribe({
