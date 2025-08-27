@@ -1,0 +1,172 @@
+@if (!isModal) {
+  <main class="address-form">
+    <section class="address-form__container">
+      <app-breadcrumb
+        class="w-100"
+        [items]="breadcrumb"
+      ></app-breadcrumb>
+      <div class="address-form__header">
+        <h2 class="font-large fw-bold m-0 text-dark">Agregar dirección</h2>
+      </div>
+      <ng-container *ngTemplateOutlet="addressForm"></ng-container>
+    </section>
+  </main>
+} @else {
+  <app-modal-base
+    [title]="'Dirección de entrega'"
+    [buttons]="[]"
+  >
+    <div class="select-delivery-address">
+      <ng-container *ngTemplateOutlet="addressForm"></ng-container>
+    </div>
+  </app-modal-base>
+}
+<ng-template #addressForm>
+  <form [formGroup]="form" class="row align-items-end" style="row-gap: 0.5rem;">
+    <div class="col-lg-3 col-md-3 col-sm-12 col-12">
+      <app-custom-control
+        formControlName="alias"
+        [id]="'alias'"
+        [name]="'alias'"
+        [label]="'Alias'"
+        [type]="'text'"
+        [placeholder]="'Mi casa'"
+        [control]="form.controls['alias']"
+      ></app-custom-control>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-12 col-12">
+      <app-custom-control
+        formControlName="nombre_recibidor"
+        [id]="'nombre_recibidor'"
+        [name]="'nombre_recibidor'"
+        [label]="'Nombre del destinatario'"
+        [type]="'text'"
+        [placeholder]="'Ingresa nombre completo'"
+        [control]="form.controls['nombre_recibidor']"
+      ></app-custom-control>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+      <app-custom-control
+        formControlName="numero_recibidor"
+        [id]="'numero_recibidor'"
+        [name]="'numero_recibidor'"
+        [label]="'Teléfono del destinatario'"
+        [type]="'tel'"
+        [maxLength]="10"
+        [placeholder]="'Ingresa su teléfono'"
+        [control]="form.controls['numero_recibidor']"
+      ></app-custom-control>
+    </div>
+    <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+      <app-custom-control
+        formControlName="calle"
+        [id]="'calle'"
+        [name]="'calle'"
+        [label]="'Calle'"
+        [type]="'text'"
+        [placeholder]="'Ingresa el nombre de la calle'"
+        [control]="form.controls['calle']"
+      ></app-custom-control>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-6 col-6">
+      <app-custom-control
+        formControlName="numero_exterior"
+        [id]="'numero_exterior'"
+        [name]="'numero_exterior'"
+        [label]="'Num. Exterior'"
+        [type]="'text'"
+        [control]="form.controls['numero_exterior']"
+      ></app-custom-control>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-6 col-6">
+      <app-custom-control
+        formControlName="numero_interior"
+        [id]="'numero_interior'"
+        [name]="'numero_interior'"
+        [label]="'Num. Interior'"
+        [type]="'text'"
+        [control]="form.controls['numero_interior']"
+      ></app-custom-control>
+    </div>
+    <div class="col-12">
+      <app-custom-control
+        formControlName="referencias"
+        [id]="'referencias'"
+        [name]="'referencias'"
+        [label]="'Referencias'"
+        [type]="'text'"
+        [control]="form.controls['referencias']"
+      ></app-custom-control>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+      <app-custom-control
+        formControlName="codigo_postal"
+        [id]="'codigo_postal'"
+        [name]="'codigo_postal'"
+        [label]="'Código postal'"
+        [type]="'number'"
+        [maxLength]="5"
+        [control]="form.controls['codigo_postal']"
+        (onValueChange)="loadColonies($event)"
+      ></app-custom-control>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+      <app-custom-select
+        formControlName="colonia_id"
+        [id]="'colonia_id'"
+        [name]="'colonia_id'"
+        [label]="'Colonia'"
+        [items]="colonies"
+        [bindLabel]="'colonia_nombre'"
+        [bindValue]="'colonia_id'"
+        [isRequired]="true"
+        [isDisabled]="!colonies.length"
+        [isReadonly]="!colonies.length"
+        [control]="form.controls['colonia_id']"
+      ></app-custom-select>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+      <app-custom-select
+        formControlName="estado_id"
+        [id]="'estado_id'"
+        [name]="'estado_id'"
+        [label]="'Estado'"
+        [items]="states"
+        [bindLabel]="'estado_nombre'"
+        [bindValue]="'estado_id'"
+        [isRequired]="true"
+        [isDisabled]="true"
+        [isReadonly]="true"
+        [control]="form.controls['estado_id']"
+      ></app-custom-select>
+    </div>
+    @if (showMap) {
+      <div class="col-12">
+        <span class="font-small">*ES REQUERIDO COLOCAR EL MARCADOR EN LA UBICACIÓN CORRECTA</span>
+        <app-map
+          [direction]="{
+            lat: (address) ? address.latitud : '',
+            lng: (address) ? address.longitud : '',
+          }"
+          [isClickable]="true"
+          (onAddressChange)="loadSelectedAddress($event)"
+        ></app-map>
+      </div>
+    }
+    <div class="col-12 address-form__actions">
+      <app-custom-button
+        [text]="'Cancelar'"
+        [color]="'dark'"
+        [fill]="'clear'"
+        (onClick)="goBack()"
+      ></app-custom-button>
+      <app-custom-button
+        [text]="'Guardar dirección'"
+        [color]="'primary'"
+        [fill]="'solid'"
+        [isDisabled]="!form.valid || !form.dirty"
+        (onClick)="(address && address.id) ? updateAddress() : saveAddress()"
+      ></app-custom-button>
+    </div>
+  </form>
+</ng-template>

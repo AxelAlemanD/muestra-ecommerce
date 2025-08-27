@@ -1,0 +1,109 @@
+.subcategory-group {
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--spacing-normal);
+    justify-content: space-between;
+    padding-bottom: var(--spacing-normal);
+
+    &-categories {
+      display: flex;
+      // flex-wrap: wrap;
+      overflow: auto;
+      scrollbar-width: none;
+      margin: 0;
+      padding: 0;
+      gap: var(--spacing-normal);
+      list-style: none;
+
+      &__item {
+        &--active {
+          color: var(--color-primary);
+          border-bottom: 2px solid var(--color-primary);
+        }
+
+        &:hover {
+          transform: translateY(-3px);
+          transition: 0.2s;
+
+          app-custom-button ::ng-deep .btn {
+            color: var(--color-primary) !important;
+
+            &:hover {
+              background-color: transparent !important;
+            }
+          }
+        }
+      }
+    }
+
+    &-carousel__actions {
+      flex: 2;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: var(--spacing-normal);
+
+      ::ng-deep .btn {
+        border-radius: 50% !important;
+        width: var(--spacing-large);
+        height: var(--spacing-large);
+        padding: var(--spacing-extra-small);
+        justify-content: center;
+      }
+    }
+  }
+
+  &__content {
+
+    &-carousel {
+      position: relative;
+    }
+  }
+
+  &__no-content {
+    height: 12rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.force-grid ::ng-deep .slick-list .slick-track {
+  width: 100% !important;
+}
+
+.force-grid ::ng-deep .slick-list .slick-track .slick-slide {
+  @media (min-width: 1251px) {
+    flex: 1 1 calc(10rem + var(--spacing-normal));
+    max-width: calc(10rem + var(--spacing-normal));
+  }
+
+  @media (max-width: 1250px) {
+    width: calc((100% / 10) - var(--spacing-normal));
+  }
+
+  @media (max-width: 1100px) {
+    width: calc((100% / 8) - var(--spacing-normal));
+  }
+
+  @media (max-width: 870px) {
+    width: calc((100% / 6) - var(--spacing-normal));
+  }
+
+  @media (max-width: 670px) {
+    width: calc((100% / 3) - var(--spacing-normal));
+  }
+
+  // width: calc(100% / 8) !important;
+
+  // @media (max-width: 1000px) {
+  //   width: calc(100% / 6) !important;
+  // }
+
+  // @media (max-width: 600px) {
+  //   width: calc(100% / 3) !important;
+  // }
+}

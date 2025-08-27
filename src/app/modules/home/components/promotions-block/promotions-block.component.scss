@@ -1,0 +1,29 @@
+.promotions-block {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-normal);
+
+  app-promotion-card {
+    @media (min-width: 1251px) {
+      flex: 1 1 calc(14rem + var(--spacing-normal));
+      max-width: calc(14rem + var(--spacing-normal));
+    }
+
+    @media (max-width: 1250px) {
+      width: calc((100% / 5) - var(--spacing-normal));
+    }
+
+    @media (max-width: 1100px) {
+      width: calc((100% / 4) - var(--spacing-normal));
+    }
+
+    @media (max-width: 870px) {
+      width: calc((100% / 3) - var(--spacing-normal));
+    }
+
+    @media (max-width: 670px) {
+      width: calc((100% / 2) - var(--spacing-normal));
+    }
+  }
+}

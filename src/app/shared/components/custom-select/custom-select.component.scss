@@ -1,0 +1,66 @@
+@import "../../../../theme/app.variables.scss";
+
+.custom-select {
+
+  &__group {
+    flex: 1;
+    display: flex;
+    position: relative;
+    align-items: center;
+  }
+
+  &__alert {
+    position: absolute;
+    right: 0.5rem;
+    cursor: pointer;
+    color: var(--color-danger) !important;
+  }
+
+  &__input {
+    width: 100%;
+
+    &::ng-deep {
+      .ng-select-container {
+        border: 0px !important;
+        border-radius: var(--border-radius) !important;
+        background-color: var(--color-medium) !important;
+        color: var(--color-medium-contrast) !important;
+        box-shadow: unset !important;
+      }
+
+      .ng-option {
+        background-color: var(--color-medium) !important;
+      }
+
+      .ng-value, .ng-value-label, .ng-option-label {
+        color: var(--color-medium-contrast) !important;
+      }
+    }
+  }
+
+  &__button ::ng-deep .btn {
+    border-radius: 0 var(--border-radius) var(--border-radius) 0 !important;
+  }
+
+  &--error {
+    border-radius: var(--border-radius);
+    outline: 1px solid var(--color-danger) !important;
+
+    .custom-select__button ::ng-deep .btn {
+      color: var(--color-danger) !important;
+    }
+  }
+}
+
+.input-group {
+  &:focus-within {
+    border-radius: var(--border-radius);
+    outline: 1px solid var(--color-secondary);
+  }
+
+  &.has-button {
+    .custom-select__input ::ng-deep .ng-select-container {
+      border-radius: var(--border-radius) 0 0 var(--border-radius) !important;
+    }
+  }
+}

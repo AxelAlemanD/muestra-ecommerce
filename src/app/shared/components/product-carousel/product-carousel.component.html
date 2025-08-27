@@ -1,0 +1,32 @@
+<section class="product-carousel">
+  <div class="product-carousel__header">
+    <h2 class="font-large m-0">{{ title }}</h2>
+  </div>
+  <div class="product-carousel__content">
+    <app-custom-button
+      class="product-carousel__content__action-left"
+      [icon]="'arrow-back'"
+      [fill]="'solid'"
+      [color]="'medium'"
+      (onClick)="prevSlide()"
+    ></app-custom-button>
+    <app-custom-button
+      class="product-carousel__content__action-right"
+      [icon]="'arrow-forward'"
+      [fill]="'solid'"
+      [color]="'medium'"
+      (onClick)="nextSlide()"
+    ></app-custom-button>
+    <ngx-slick-carousel
+      class="carousel" 
+      #slickModal="slick-carousel" 
+      [config]="slideConfig"
+    >
+      @for (product of products; track product.id) {
+        <div ngxSlickItem class="slide" [id]="product.id +''">
+          <app-product-card [productId]="product.id"></app-product-card>
+        </div>
+      }
+    </ngx-slick-carousel>
+  </div>
+</section>

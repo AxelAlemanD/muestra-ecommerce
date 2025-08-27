@@ -1,0 +1,10 @@
+.product__variants {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-normal);
+}
+
+.variants__group {
+    display: flex;
+    gap: var(--spacing-small);
+}

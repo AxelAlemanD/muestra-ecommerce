@@ -1,0 +1,7 @@
+<div class="image-grid">
+  @for (item of items; track item.id) {
+    <a class="image-grid__item" [routerLink]="'/productos'" [queryParams]="{ marca: item.id }">
+      <img appLazyImage="{{ item.media.media_url | uploads }}" [alt]="item.nombre">
+    </a>
+  }
+</div>

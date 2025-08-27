@@ -1,0 +1,69 @@
+<aside class="mobile-sidemenu__body" [ngClass]="{'mobile-sidemenu__body--open': isOpen}">
+  <div class="mobile-sidemenu__header">
+    <strong class="font-normal fw-bold">{{ currentPanel.title }}</strong>
+    @for (button of currentPanel.buttons; track $index) {
+      <app-custom-button
+        class="mobile-sidemenu__button {{button.position}}"
+        [color]="button.color"
+        [icon]="button.icon!"
+        [fill]="button.fill!"
+        (onClick)="button.action!()"
+      ></app-custom-button>
+    }
+  </div>
+  @if (currentPanel.title === 'Menu') {
+    <div class="mobile-sidemenu__indicators">
+      <!-- <app-custom-button
+        class="indicators__item"
+        [color]="'dark'"
+        [text]="'Sucursal'"
+        [icon]="'location-outline'"
+        [fill]="'clear'"
+        (onClick)="openSelectBranchModal()"
+      ></app-custom-button> -->
+      <div class="cart-indicator">
+        @if (productsQuantityInCart) {
+          <div name="cart-outline" class="cart-indicator__badge badge">
+            {{ productsQuantityInCart }}
+          </div>
+        }
+        <app-custom-button
+          class="indicators__item"
+          [color]="'dark'"
+          [text]="'Mi carrito'"
+          [icon]="'cart-outline'"
+          [fill]="'clear'"
+          (onClick)="redirectTo('mi-carrito')"
+        ></app-custom-button>
+      </div>
+      <app-custom-button
+        class="indicators__item"
+        [color]="'dark'"
+        [text]="'Mi perfil'"
+        [icon]="'person-outline'"
+        [fill]="'clear'"
+        (onClick)="redirectTo('perfil')"
+      ></app-custom-button>
+    </div>
+  }
+  <ul class="mobile-sidemenu__links">
+    @for (item of currentPanel.items; track $index) {
+      <li class="mobile-sidemenu__link">
+        @if (item.link) {
+          <a (click)="openLink(item.link); emitClose()">{{ item.name }}</a>  
+        }
+        @if (item.subitems && item.subitems.length) {
+          <a (click)="openPanel(item)">
+            {{ item.name }}
+            <ion-icon name="chevron-forward"></ion-icon>
+          </a>
+        }
+      </li>
+    }
+  </ul>
+  @if (currentPanel.title === 'Menu') {
+    <a (click)="logout(); emitClose();" class="mobile-sidemenu__logout">Cerrar sesión</a>
+  }
+</aside>
+
+<div class="mobile-sidemenu__backdrop" [ngClass]="{'mobile-sidemenu__backdrop--active': isOpen}" (click)="emitClose()"></div>

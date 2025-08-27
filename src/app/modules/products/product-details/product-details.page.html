@@ -1,0 +1,185 @@
+<main>
+    @if (product) {
+        <section class="product">
+            <app-breadcrumb
+                class="w-100"
+                [items]="breadcrumb"
+            ></app-breadcrumb>
+            <div class="product__gallery">
+                @if (showGallery) {
+                    <app-product-gallery
+                        [medias]="product.media"
+                        [thumbnailsToShow]="5"
+                    ></app-product-gallery>
+                }
+            </div>
+            <form class="product__content" [formGroup]="form">
+                @if ((!selectedVariant && product.contiene_promocion) || (selectedVariant && selectedVariant.contiene_promocion)) {
+                    <div class="product__tags">
+                        <div class="tag">
+                            <ion-icon name="flame" class="text-primary"></ion-icon>
+                            <span class="tag__text">Promoción</span>
+                        </div>
+                    </div>
+                }
+                <div class="product__details">
+                    <h3 class="font-large m-0">{{ product.nombre }}</h3>
+                    @if (product.marca) {
+                        <small class="text-dark-50">Por 
+                            <a 
+                                class="text-dark"
+                                [routerLink]="'/productos'" 
+                                [queryParams]="{ marca: product.marca.id }" 
+                            >
+                                {{ product.marca.nombre }}
+                            </a>
+                        </small>
+                    }
+                </div>
+                <div class="product__price">
+                    @if (selectedVariant) {
+                        @if (selectedVariant.contiene_promocion) {
+                            <small class="text-dark-50 text-line-through">{{ selectedVariant.precio | currency:"MXN":"symbol" }}</small>
+                        }
+                        <strong class="text-primary font-large fw-bold">
+                            {{ selectedVariant.precio_con_descuento | currency:"MXN":"symbol" }}
+                            @if (selectedVariant.descuento_variante && selectedVariant.contiene_promocion) {
+                                <small class="product__discount">
+                                    @if (selectedVariant.descuento_variante.tipo === "$") {
+                                        -{{ selectedVariant.descuento_variante.valor | currency }} OFF
+                                    } @else {
+                                        -{{ selectedVariant.descuento_variante.valor }}% OFF
+                                    }
+                                </small>
+                            }
+                        </strong>    
+                    } @else {
+                        @if (product.contiene_promocion) {
+                            <small class="text-dark-50 text-line-through">{{ product.precio | currency:"MXN":"symbol" }}</small>
+                        }
+                        <strong class="text-primary font-large fw-bold">
+                            {{ product.precio_con_descuento | currency:"MXN":"symbol" }}
+                            @if (product.descuento && product.contiene_promocion) {
+                                <small class="product__discount">
+                                    @if (product.descuento.tipo === "$") {
+                                        -{{ product.descuento.valor | currency }} OFF
+                                    } @else {
+                                        -{{ product.descuento.valor }}% OFF
+                                    }
+                                </small>
+                            }
+                        </strong>
+                    }
+                </div>
+                <div class="product__description">
+                    @if (product.caracteristicas) {
+                        <div class="font-normal text-dark m-0" [innerHtml]="product.caracteristicas | safeHtml"></div>
+                    }
+                    <small class="text-dark-50">SKU: <span class="text-dark">{{ product.sku }}</span></small>
+                    @if (product.categorias && product.categorias.length) {
+                        <small class="text-dark-50">
+                            Categorías: <span class="text-dark">
+                                @for (category of product.categorias; track category.id; let isFirst = $first, isLast = $last) {
+                                    @if (isFirst) {
+                                        <a [routerLink]="['/categorias', category.id]" class="fw-bold font-small text-decoration-none">
+                                            {{ category.nombre }}
+                                        </a>
+                                    } @else {
+                                        <a [routerLink]="['/categorias', product.categorias[0].id, 'subcategoria', category.id]" class="fw-bold font-small text-decoration-none">
+                                            {{ category.nombre }}
+                                        </a>
+                                    }
+                                    @if (!isLast) {
+                                        ,
+                                    }
+                                }
+                            </span>
+                        </small>
+                    }
+                </div>
+
+                @if (product.variantes && product.variantes.length > 0) {
+                    <app-product-variants-form
+                        [variants]="product.variantes"
+                        [selectedVariantId]="(selectedVariant) ? selectedVariant.id : null"
+                        [isDisabled]="isLoading"
+                        (onSelectVariant)="setSelectedVariant($event)"
+                    ></app-product-variants-form>
+                }
+                <!-- <app-custom-button
+                    class="see-availability-button"
+                    [text]="'Ver disponibilidad en tienda'"
+                    [color]="'dark'"
+                    [fill]="'clear'"
+                    (onClick)="openSelectAvailabilityModal()"
+                ></app-custom-button> -->
+
+                <div class="product__option">
+                    <label [for]="'product' + product.id" class="text-normal">Cantidad <small class="text-dark-50">(Disponible)</small></label>
+                    <div class="product__actions">
+                        @if(!cartItem || cartItem.cantidad === 0){
+                            <app-custom-button
+                                [text]="(availableStock) ? 'Agregar al carrito' : 'No disponible'"
+                                [icon]="(availableStock) ? 'cart' : ''"
+                                [icon]="'cart'"
+                                [fill]="'opacity'"
+                                [color]="'primary'"
+                                [isDisabled]="!availableStock"
+                                (onClick)="addToCart()"
+                            ></app-custom-button>}
+                        @else {
+                            <app-custom-quantity-control
+                                formControlName="quantity"
+                                [id]="'product' + product.id"
+                                [name]="'product' + product.id"
+                                [control]="form.controls['quantity']"
+                                [max]="availableStock"
+                                (onValueChange)="updateCartItem($event)"
+                                (onControlChange)="isLoading = true"
+                            ></app-custom-quantity-control>
+                        }
+                        @if (availableStock) {
+                            <app-custom-button
+                                [text]="'Comprar ahora'"
+                                [color]="'primary'"
+                                [isDisabled]="isLoading"
+                                (onClick)="purchaseNow()"
+                            ></app-custom-button>
+                        }
+                    </div>
+                </div>
+            </form>
+            <div class="product__more-info">
+                <div class="accordion-item product__more-info__item">
+                  <div class="accordion-header product__more-info__item__header" [id]="'product-description-title'">
+                    <button class="accordion-button fw-bold text-dark" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#product-description'" aria-expanded="true" [attr.aria-controls]="'product-description'">
+                        Descripción del producto
+                    </button>
+                  </div>
+                  <div
+                    [id]="'product-description'"
+                    class="accordion-collapse collapse "
+                    [attr.aria-labelledby]="'question-1'"
+                    data-bs-parent="#accordionExample"
+                  >
+                    @if (product.descripcion) {
+                        <div class="accordion-body product__more-info__item__content font-normal text-dark" [innerHtml]="product.descripcion | safeHtml">
+                        </div>
+                    } @else {
+                        <div class="accordion-body product__more-info__item__content font-normal text-dark">
+                            <small>Este producto no contiene una descripción</small>
+                        </div>
+                    }
+                  </div>
+                </div>
+            </div>
+        </section>
+    }
+    @if (relatedProducts && relatedProducts.length) {
+        <app-product-carousel
+          [title]="'Productos relacionados'"
+          [products]="relatedProducts"
+          [autoplay]="true"
+        ></app-product-carousel>
+    }
+</main>

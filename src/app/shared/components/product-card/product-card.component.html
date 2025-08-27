@@ -1,0 +1,148 @@
+@if (product) {
+    <div class="product-card" [title]="product.nombre">
+        <div class="product-card__header">
+            <img appLazyImage="{{ product.media[0].media_url | uploads }}" [alt]="product.nombre" class="product-card__header-image">
+            <div class="product-card__header-actions">
+                
+                <div class="product-card__header-tags">
+                    @if ((!selectedVariant && product.contiene_promocion) || (selectedVariant && selectedVariant.contiene_promocion)) {
+                        <div class="tag">
+                            <ion-icon name="flame" class="text-primary"></ion-icon>
+                            <span class="tag__text">Promoción</span>
+                        </div>
+                    }
+                </div>
+                
+                <app-custom-button 
+                    class="product-card__header-preview"
+                    [icon]="'scan'"
+                    [fill]="'clear'"
+                    [color]="'dark'"
+                    (onClick)="openQuickviewModal()"
+                ></app-custom-button>
+            </div>
+        </div>
+
+        <div class="product-card__content">
+            @if (product.categorias && product.categorias.length) {
+                <a class="text-dark-50 font-small text-decoration-none" [routerLink]="">
+                    {{ product.categorias[0].nombre }}
+                </a>
+            }
+            <h2 class="product-card__title">
+                <a [routerLink]="['/productos', product.id]">{{ product.nombre }}</a>
+            </h2>
+            @if (product.marca) {
+                <small class="text-dark-50">Por 
+                    <a 
+                        class="text-dark"
+                        [routerLink]="'/productos'" 
+                        [queryParams]="{ marca: product.marca.id }"
+                    >
+                        {{ product.marca.nombre }}
+                    </a>
+                </small>
+            }
+        </div>
+
+        <form class="product-card__footer" [formGroup]="form">
+            <div class="product-card__footer-price">
+                @if (selectedVariant) {
+                    @if (selectedVariant.contiene_promocion) {
+                        <small class="text-dark-50 text-line-through">{{ selectedVariant.precio | currency:"MXN":"symbol" }}</small>
+                    }
+                    <strong class="text-primary font-normal fw-bold">
+                        {{ selectedVariant.precio | currency:"MXN":"symbol" }}
+                        @if (selectedVariant.descuento_variante && selectedVariant.contiene_promocion) {
+                            <small class="product-card__footer-discount">
+                                @if (selectedVariant.descuento_variante.tipo === "$") {
+                                    -{{ selectedVariant.descuento_variante.valor | currency }} OFF
+                                } @else {
+                                    -{{ selectedVariant.descuento_variante.valor }}% OFF
+                                }
+                            </small>
+                        }
+                    </strong>    
+                } @else {
+                    @if (product.contiene_promocion) {
+                        <small class="text-dark-50 text-line-through">{{ product.precio | currency:"MXN":"symbol" }}</small>
+                    }
+                    <strong class="text-primary font-normal fw-bold">
+                        {{ product.precio_con_descuento | currency:"MXN":"symbol" }}
+                        @if (product.descuento && product.contiene_promocion) {
+                            <small class="product-card__footer-discount">
+                                @if (product.descuento.tipo === "$") {
+                                    -{{ product.descuento.valor | currency }} OFF
+                                } @else {
+                                    -{{ product.descuento.valor }}% OFF
+                                }
+                            </small>
+                        }
+                    </strong>
+                }
+            </div>
+
+            @if (product.variantes && product.variantes.length) {
+                <div class="product-card__variants">
+                    @for (variant of product.variantes; track variant.id; let index = $index) {
+                        @if (index < 3) {
+                            <a
+                                class="product-card__variants__item"
+                                [title]="variant.contiene_promocion 
+                                    ? (variant.descuento_variante.tipo === '$' 
+                                        ? '-$' + variant.descuento_variante.valor + ' OFF' 
+                                        : '-' + variant.descuento_variante.valor + '% OFF') 
+                                    : ''
+                                "
+                                [ngClass]="{
+                                    'product-card__variants__item--disabled': isLoading,
+                                    'product-card__variants__item--active': selectedVariant && selectedVariant.id === variant.id
+                                }"
+                                (click)="setSelectedVariant(variant.id)"
+                            >
+                                {{ variant.variante.size }}
+                                @if (variant.contiene_promocion) {
+                                    <ion-icon name="flame" class="product-card__variants__item--promotion"></ion-icon>
+                                }
+                            </a>
+                        }
+                        @if (index == 3 && product.variantes.length >= 4) {
+                            <a
+                                title="Ver todas las variantes"
+                                class="product-card__variants__item"
+                                [ngClass]="{
+                                    'product-card__variants__item--disabled': isLoading,
+                                }"
+                                [routerLink]="['/productos', product.id]"
+                            >
+                                <ion-icon name="add-outline" class="font-small"></ion-icon>
+                            </a>
+                        }
+                    }
+                </div>
+            }
+
+            @if(!cartItem || cartItem.cantidad === 0){
+                <app-custom-button
+                    [text]="(availableStock) ? 'Agregar' : 'No disponible'"
+                    [icon]="(availableStock) ? 'cart' : ''"
+                    [fill]="'opacity'"
+                    [color]="'primary'"
+                    [isLoading]="isLoading"
+                    [isDisabled]="!availableStock"
+                    (onClick)="addToCart()"
+                ></app-custom-button>
+            } @else {
+                <app-custom-quantity-control
+                    formControlName="quantity"
+                    [id]="'product-card' + product.id"
+                    [name]="'product-card' + product.id"
+                    [control]="form.controls['quantity']"
+                    [max]="availableStock"
+                    (onValueChange)="updateCartItem($event)"
+                    (onControlChange)="isLoading = true"
+                ></app-custom-quantity-control>
+            }
+        </form>
+    </div>
+}

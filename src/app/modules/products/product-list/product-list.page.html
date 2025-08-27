@@ -1,0 +1,42 @@
+@if (filters) {
+  <main class="product-list">
+    <section class="product-list__separator">
+      <div class="d-flex flex-column">
+        <h2 class="font-large fw-bold m-0 text-dark">Productos</h2>
+        <app-breadcrumb
+          [items]="breadcrumb"
+        ></app-breadcrumb>
+      </div>
+      <app-active-filters></app-active-filters>
+    </section>
+    <app-filters-widget
+      class="product-list__filters"
+      [filters]="filters.filters"
+    ></app-filters-widget>
+    <app-mobile-side-filters
+      class="mobile-side-filters"
+      [isOpen]="showSideFilters"
+      [filters]="filters.filters"
+      [ngClass]="{'mobile-side-filters--open': showSideFilters}"
+    ></app-mobile-side-filters>
+    <app-paginator
+      class="product-list__content"
+      [pages]="filters.pages"
+      [limit]="filters.limit"
+      [currentPage]="filters.page"
+      [items]="filters.items"
+      [total]="filters.total"
+    >
+      @if (filters.items.length) {
+        <app-product-grid
+          [products]="filters.items"
+        ></app-product-grid>
+      } @else {
+        <div class="product-list__content--no-content">
+          <img class="product-list__content--no-content__image" src="assets/images/sad-dog.svg" alt="Perrito triste">
+          <strong class="text-dark-50">Lo sentimos, no encontramos ninguna coincidencia</strong>
+        </div>
+      }
+    </app-paginator>
+  </main>
+}

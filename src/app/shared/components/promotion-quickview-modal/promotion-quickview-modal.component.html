@@ -1,0 +1,92 @@
+<app-modal-base [buttons]="[]" [hasHideBtn]="true">
+    <div class="promotion-quickview">
+        <div class="promotion-quickview__gallery">
+            @if (showGallery) {
+                <app-product-gallery
+                    [medias]="medias"
+                    [thumbnailsToShow]="4"
+                ></app-product-gallery>
+            }
+        </div>
+        <form class="promotion-quickview__content" [formGroup]="form">
+            <div class="promotion-quickview__content-tags">
+                <div class="tag">
+                    <ion-icon name="flame" class="text-primary"></ion-icon>
+                    <span class="tag__text">Promoción</span>
+                </div>
+            </div>
+            <div class="promotion-quickview__content-details">
+                <small class="text-dark-50">
+                    Termina en {{ days }}:{{ hours }}:{{ minutes }}:{{ seconds }}
+                </small>
+                <h3 class="font-large m-0">{{ promotion.titulo }}</h3>
+                <!-- <small class="text-dark-50">Por <span class="text-dark">{{ promotion.marca.nombre }}</span></small> -->
+            </div>
+            @if (promotion.productos) {
+                <div class="promotion-quickview__content-description">
+                    <span>Esta promoción incluye:</span>
+                    <ul>
+                        @for (product of promotion.productos; track product.id) {
+                            <li>{{ product.cantidad_producto }}x {{ product.nombre }}</li>
+                        }
+                    </ul>
+                </div>
+            }
+            <div class="promotion-quickview__content-price">
+                <strong class="text-primary font-large fw-bold">{{ promotion.total_con_descuento | currency:"MXN":"symbol" }}</strong>
+                <small class="text-dark-50 text-line-through">{{ promotion.total_original | currency:"MXN":"symbol" }}</small>
+            </div>
+            <div class="promotion-quickview__content-actions">
+                <small class="text-dark-50">(Disponible)</small>
+                <div class="d-flex gap-2">
+                    @if (!cartItem || cartItem.cantidad === 0) {
+                        <app-custom-button
+                            [text]="(promotion.activo) ? 'Agregar al carrito' : 'No disponible'"
+                            [icon]="(promotion.activo) ? 'cart' : ''"
+                            [fill]="'opacity'"
+                            [color]="'primary'"
+                            [isLoading]="isLoading"
+                            [isDisabled]="!promotion.activo"
+                            (onClick)="addToCart()"
+                        ></app-custom-button>
+                    } @else {
+                        <app-custom-button
+                            [text]="'Remover'"
+                            [icon]="'trash'"
+                            [fill]="'outline'"
+                            [color]="'primary'"
+                            (onClick)="removeCartItem()"
+                        ></app-custom-button>
+                    }
+                    <!--
+                        @if (cartItem && cartItem.cantidad > 0) {
+                            <app-custom-quantity-control
+                                formControlName="quantity"
+                                [id]="'promotion-quickview' + promotion.id"
+                                [name]="'promotion-quickview' + promotion.id"
+                                [control]="form.controls['quantity']"
+                                (onValueChange)="updateCartItem($event)"
+                            ></app-custom-quantity-control>
+                        }
+                    -->
+                    @if (promotion.activo) {
+                        <app-custom-button
+                            [text]="'Comprar ahora'"
+                            [color]="'primary'"
+                            (onClick)="purchaseNow()"
+                        ></app-custom-button>
+                    }
+                </div>
+            </div>
+
+            <app-custom-button
+                [text]="'Ver descripción completa'"
+                [icon]="'arrow-forward'"
+                [iconPosition]="'right'"
+                [fill]="'clear'"
+                [color]="'primary'"
+                (onClick)="goToShowPromotion()"
+            ></app-custom-button>
+        </form>
+    </div>
+</app-modal-base>

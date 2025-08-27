@@ -1,0 +1,29 @@
+.coupon-card {
+  border-radius: var(--border-radius);
+  background-color: var(--color-medium);
+
+  &__header {
+    border-bottom: 1px solid var(--color-light);
+    padding: var(--spacing-normal);
+  }
+
+  &__content {
+    padding: var(--spacing-normal);
+  }
+
+  &__icon {
+    padding: 0.5rem;
+    margin-right: 0.4rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(229, 83, 68, 0.2);
+
+    ion-icon {
+      margin: 0;
+      font-size: 1.8rem;
+      color: var(--color-primary);
+    }
+  }
+}

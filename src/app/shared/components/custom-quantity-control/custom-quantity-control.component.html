@@ -1,0 +1,31 @@
+<div class="custom-quantity">
+  <app-custom-button
+    class="decrease-button"
+    [color]="'medium'"
+    [icon]="(innerValue > 1) ? 'remove' : 'trash'"
+    [isDisabled]="actionExecuted === 'increase'"
+    (onClick)="actionExecuted = 'decrease'; asignValue(innerValue - 1)"
+  ></app-custom-button>
+  <input
+    #input
+    class="form-control custom-quantity__input font-small"
+    placeholder="0"
+    type="number"
+    min="0"
+    [id]="id"
+    [name]="name"
+    [max]="max"
+    [(ngModel)]="innerValue"
+    (ngModelChange)="onChange($event)"
+    (blur)="onTouched($event); onBlur();"
+    (focus)="onFocused()"
+    (input)="emitChange(input.value); emitControlChange()"
+  />
+  <app-custom-button
+    class="increase-button"
+    [color]="'medium'"
+    [icon]="'add'"
+    [isDisabled]="actionExecuted === 'decrease'"
+    (onClick)="actionExecuted = 'increase'; asignValue(innerValue + 1)"
+  ></app-custom-button>
+</div>

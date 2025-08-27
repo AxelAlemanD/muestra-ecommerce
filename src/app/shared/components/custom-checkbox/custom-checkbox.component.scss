@@ -1,0 +1,20 @@
+.custom-checkbox {
+
+  &__label {
+    font-size: var(--font-size-small);
+    color: var(--color-dark);
+  }
+
+  &__input {
+    &:checked {
+      background-color: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+
+    &:focus {
+      outline: 0;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 .25rem rgba(var(--color-primary-rgb), .25);
+    }
+  }
+}

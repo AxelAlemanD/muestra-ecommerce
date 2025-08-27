@@ -1,0 +1,12 @@
+<app-custom-button
+  class="toggle-theme-btn"
+  [color]="'medium'"
+  [icon]="(theme === 'dark-theme') ? 'sunny' : 'moon'"
+  [fill]="'solid'"
+  (onClick)="toggleTheme()"
+></app-custom-button>
+<app-loading></app-loading>
+<app-navbar></app-navbar>
+<app-mobile-navbar></app-mobile-navbar>
+<router-outlet />
+<app-footer></app-footer>

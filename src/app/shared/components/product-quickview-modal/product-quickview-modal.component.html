@@ -1,0 +1,131 @@
+<app-modal-base [buttons]="[]" [hasHideBtn]="true">
+    @if (product) {
+        <div class="product-quickview">
+            <div class="product-quickview__gallery">
+                <app-product-gallery
+                    [medias]="product.media"
+                    [thumbnailsToShow]="4"
+                ></app-product-gallery>
+            </div>
+            <form class="product-quickview__content" [formGroup]="form">
+                @if ((!selectedVariant && product.contiene_promocion) || (selectedVariant && selectedVariant.contiene_promocion)) {
+                    <div class="product-quickview__content-tags">
+                        <div class="tag">
+                            <ion-icon name="flame" class="text-primary"></ion-icon>
+                            <span class="tag__text">Promoción</span>
+                        </div>
+                    </div>
+                }
+                <div class="product-quickview__content-details">
+                    <small class="text-dark-50">
+                        {{ product.categorias[0].nombre }}
+                    </small>
+                    <h3 class="font-large m-0">{{ product.nombre }}</h3>
+                    @if (product.marca) {
+                        <small class="text-dark-50">Por 
+                            <a 
+                                class="text-dark"
+                                [routerLink]="'/productos'" 
+                                [queryParams]="{ marca: product.marca.id }"
+                                (click)="hideModal()"
+                            >
+                                {{ product.marca.nombre }}
+                            </a>
+                        </small>
+                    }
+                </div>
+                @if (product.caracteristicas) {
+                    <div class="product-quickview__content-description" [innerHtml]="product.caracteristicas | safeHtml"></div>
+                }
+                <div class="product-quickview__content-price">
+                    @if (selectedVariant) {
+                        @if (selectedVariant.contiene_promocion) {
+                            <small class="text-dark-50 text-line-through">{{ selectedVariant.precio | currency:"MXN":"symbol" }}</small>
+                        }
+                        <strong class="text-primary font-large fw-bold">
+                            {{ selectedVariant.precio_con_descuento | currency:"MXN":"symbol" }}
+                            @if (selectedVariant.descuento_variante && selectedVariant.contiene_promocion) {
+                                <small class="product-quickview__content-discount">
+                                    @if (selectedVariant.descuento_variante.tipo === "$") {
+                                        -{{ selectedVariant.descuento_variante.valor | currency }} OFF
+                                    } @else {
+                                        -{{ selectedVariant.descuento_variante.valor }}% OFF
+                                    }
+                                </small>
+                            }
+                        </strong>    
+                    } @else {
+                        @if (product.contiene_promocion) {
+                            <small class="text-dark-50 text-line-through">{{ product.precio | currency:"MXN":"symbol" }}</small>
+                        }
+                        <strong class="text-primary font-large fw-bold">
+                            {{ product.precio_con_descuento | currency:"MXN":"symbol" }}
+                            @if (product.descuento && product.contiene_promocion) {
+                                <small class="product-quickview__content-discount">
+                                    @if (product.descuento.tipo === "$") {
+                                        -{{ product.descuento.valor | currency }} OFF
+                                    } @else {
+                                        -{{ product.descuento.valor }}% OFF
+                                    }
+                                </small>
+                            }
+                        </strong>
+                    }
+                </div>
+                @if (product.variantes && product.variantes.length > 0) {
+                    <app-product-variants-form
+                        [variants]="product.variantes"
+                        [selectedVariantId]="(selectedVariant) ? selectedVariant.id : null"
+                        [isDisabled]="isLoading"
+                        (onSelectVariant)="setSelectedVariant($event)"
+                    ></app-product-variants-form>
+                }
+                <div class="product-quickview__content-actions">
+                    @if (availableStock) {
+                        <small class="text-dark-50">(Disponible)</small>
+                    }
+                    <div class="d-flex gap-2">
+                        @if (!cartItem || cartItem.cantidad === 0){
+                            <app-custom-button
+                                [text]="(availableStock) ? 'Agregar al carrito' : 'No disponible'"
+                                [icon]="(availableStock) ? 'cart' : ''"
+                                [icon]="'cart'"
+                                [fill]="'opacity'"
+                                [color]="'primary'"
+                                [isDisabled]="!availableStock"
+                                (onClick)="addToCart()"
+                            ></app-custom-button>
+                        } @else {
+                            <app-custom-quantity-control
+                                formControlName="quantity"
+                                [id]="'product-quickview' + product.id"
+                                [name]="'product-quickview' + product.id"
+                                [control]="form.controls['quantity']"
+                                [max]="availableStock"
+                                (onValueChange)="updateCartItem($event)"
+                                (onControlChange)="isLoading = true"
+                            ></app-custom-quantity-control>
+                        }
+                        @if (availableStock) {
+                            <app-custom-button
+                                [text]="'Comprar ahora'"
+                                [color]="'primary'"
+                                [isDisabled]="isLoading"
+                                (onClick)="purchaseNow()"
+                            ></app-custom-button>
+                        }
+                    </div>
+                </div>
+
+                <app-custom-button
+                    [text]="'Ver descripción completa'"
+                    [icon]="'arrow-forward'"
+                    [iconPosition]="'right'"
+                    [fill]="'clear'"
+                    [color]="'primary'"
+                    (onClick)="goToShowProduct()"
+                ></app-custom-button>
+            </form>
+        </div>
+    }
+</app-modal-base>

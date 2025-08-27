@@ -1,0 +1,32 @@
+<div
+  class="custom-radio-item"
+  [ngClass]="{
+    'custom-radio-item--selected': isSelected,
+    'custom-radio-item--disabled': isDisabled
+  }"
+  (click)="onChange(radioValue)"
+>
+  <label class="custom-radio-item__label" [for]="id">
+    <strong> {{ title }} </strong>
+    @if (content) {
+      <small> {{ content }} </small>
+    }
+  </label>
+  @if (isSelected) {
+    <ion-icon name="checkmark-circle" class="font-large text-primary"></ion-icon>
+  } @else {
+    <ion-icon name="ellipse-outline" class="font-large"></ion-icon>
+  }
+  <input
+    #input
+    class="custom-radio-item__input"
+    type="radio"
+    [id]="id"
+    [value]="radioValue"
+    [disabled]="isDisabled"
+    [(ngModel)]="innerValue"
+    (ngModelChange)="onChange($event)"
+    (blur)="onTouched($event); onBlur();"
+    (focus)="onFocused()"
+  >
+</div>

@@ -1,0 +1,79 @@
+<div class="custom-control">
+  @if (label) {
+    <label for="{{ id }}" class="font-small">
+        {{ label }}
+        @if (!isRequired) {
+          <small class="small-font text-gray"> (opcional) </small>
+        }
+    </label>
+  }
+  @if (type !== 'textarea') {
+    <div
+      class="input-group"
+      [ngClass]="{
+        'has-button': button,
+        'custom-control--error': control && control.invalid && (control.dirty || control.touched)
+      }"
+    >
+      <div class="custom-control__group">
+        <input
+          #input
+          class="form-control custom-control__input font-small"
+          [id]="id"
+          [name]="name"
+          [type]="type"
+          [min]="min"
+          [max]="max"
+          [placeholder]="placeholder"
+          [required]="isRequired"
+          [disabled]="isDisabled"
+          [readonly]="isReadonly"
+          [(ngModel)]="innerValue"
+          [minlength]="minLength"
+          [maxlength]="maxLength"
+          [value]="innerValue"
+          (ngModelChange)="onChange($event)"
+          (blur)="onTouched($event); onBlur();"
+          (focus)="onFocused()"
+          (input)="emitChange(input.value)"
+        />
+        @if (control && control.invalid && (control.dirty || control.touched)) {
+          <ion-icon
+            class="custom-control__alert"
+            name="alert-circle"
+            data-title="{{ errorMessages | validation: { name: label, type: type } : control.errors }}"
+          ></ion-icon>
+        }
+      </div>
+      @if (button) {
+        <app-custom-button
+          class="custom-control__button"
+          (onClick)="emitClick()"
+          [text]="button.text ?? ''"
+          [icon]="button.icon ?? ''"
+          [color]="button.color"
+          [isDisabled]="isDisabled && !buttonAlwaysEnabled"
+        ></app-custom-button>
+      }
+    </div>
+  } @else {
+    <textarea
+      #input
+      class="form-control custom-control__input"
+      [id]="id"
+      [name]="name"
+      [rows]="rows"
+      [placeholder]="placeholder"
+      [disabled]="isDisabled"
+      [readonly]="isReadonly"
+      [(ngModel)]="innerValue"
+      [ngClass]="{
+        'custom-control--error': control && control.errors && (control.dirty || control.touched)
+      }"
+      (ngModelChange)="onChange($event)"
+      (blur)="onTouched($event)"
+      (blur)="onBlur()"
+      (focus)="onFocused()"
+    ></textarea>
+  }
+</div>

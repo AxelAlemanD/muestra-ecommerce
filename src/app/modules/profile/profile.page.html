@@ -1,0 +1,41 @@
+<main class="profile">
+  <app-breadcrumb
+    class="w-100"
+    [items]="breadcrumb"
+  ></app-breadcrumb>
+  <aside class="profile__options">
+    <ul>
+      <li [ngClass]="{'profile__options--active': currentPath === 'mi-perfil'}">
+        <a [routerLink]="['/perfil']">
+          Mi perfil
+        </a>
+      </li>
+      <li [ngClass]="{'profile__options--active': currentPath === 'mis-direcciones'}">
+        <a [routerLink]="['/perfil/mis-direcciones']">
+          Mis direcciones
+        </a>
+      </li>
+      <li [ngClass]="{'profile__options--active': currentPath === 'mis-mascotas'}">
+        <a [routerLink]="['/perfil/mis-mascotas']">
+          Mis mascotas
+        </a>
+      </li>
+      <li [ngClass]="{'profile__options--active': currentPath === 'cambiar-credenciales'}">
+        <a [routerLink]="['/perfil/cambiar-credenciales']">
+          Cambiar contraseña
+        </a>
+      </li>
+    </ul>
+  </aside>
+  <div class="profile__content">
+    @if (currentPath === 'mi-perfil') {
+      <app-profile-form></app-profile-form>
+    } @else if (currentPath === 'mis-direcciones') {
+      <app-address-list></app-address-list>
+    } @else if (currentPath === 'mis-mascotas') {
+      <app-pet-list></app-pet-list>
+    } @else if (currentPath === 'cambiar-credenciales') {
+      <app-change-password></app-change-password>
+    }
+  </div>
+</main>

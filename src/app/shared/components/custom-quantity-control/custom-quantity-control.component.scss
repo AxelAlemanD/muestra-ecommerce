@@ -1,0 +1,41 @@
+.custom-quantity {
+  display: flex;
+  border-radius: var(--border-radius);
+
+  &__input {
+    height: 100%;
+    border: 0px;
+    border-radius: 0;
+    background-color: var(--color-medium);
+    color: var(--color-medium-contrast) !important;
+    text-align: center;
+    -moz-appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &:focus {
+      box-shadow: unset;
+    }
+  }
+
+  &:focus-within {
+    outline: 1px solid var(--color-secondary);
+  }
+}
+
+::ng-deep {
+
+  app-custom-button.decrease-button .btn {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+
+  app-custom-button.increase-button .btn {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
+}

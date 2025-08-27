@@ -1,0 +1,65 @@
+.paginator {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-normal);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-normal);
+    border-radius: var(--border-radius);
+    background-color: var(--color-light);
+    box-shadow: 5px 5px 15px rgba(var(--color-dark-rgb), 0.05);
+
+    ::ng-deep app-custom-select .custom-select {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-small);
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+
+  }
+
+  &__controls {
+    display: flex;
+    align-items: stretch;
+    gap: var(--spacing-small);
+  }
+
+  &__separator {
+    display: flex;
+    align-items: center;
+  }
+
+  &__details {
+    text-align: end;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  &__mobile-filters {
+    display: none;
+
+    ::ng-deep .btn__icon {
+      color: var(--color-dark) !important;
+      font-size: var(--font-size-large);
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .paginator__details {
+    display: none;
+  }
+
+  .paginator__mobile-filters {
+    display: block;
+  }
+}

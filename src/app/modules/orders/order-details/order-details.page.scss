@@ -1,0 +1,140 @@
+.order-details {
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-normal);
+    }
+
+    &__header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        &__status {
+            width: fit-content;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-extra-small);
+            font-weight: bold !important;
+
+            &-secondary {
+                color: var(--color-secondary);
+            }
+
+            &-success {
+                color: var(--color-success);
+            }
+
+            &-danger {
+                color: var(--color-danger);
+            }
+        }
+    }
+
+    &__content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-normal);
+    }
+
+    &__products {
+        flex: 3;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-normal);
+    }
+
+    &__delivery-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-small);
+
+        &__delivery-man,
+        &__pin {
+            flex: 1;
+            min-width: 18rem;
+        }
+
+        &__delivery-man__avatar {
+            border-radius: 50%;
+            width: var(--spacing-extra-large);
+            height: var(--spacing-extra-large);
+        }
+
+        &__pin {
+            &__container {
+                display: flex;
+                gap: var(--spacing-small);
+            }
+
+            &__digit {
+                cursor: default;
+                color: var(--color-primary-contrast);
+                padding: var(--spacing-small) var(--spacing-normal);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: var(--color-primary);
+                border-radius: var(--border-radius);
+            }
+        }
+
+        app-custom-button ::ng-deep .btn__icon {
+            font-size: var(--font-size-large);
+        }
+    }
+
+    &__map {
+        max-height: 15rem;
+    }
+
+    &__details {
+        flex: 1;
+        min-width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-small);
+    }
+
+    &__summary {
+        width: 100%;
+        height: fit-content;
+
+        table {
+            width: 100%;
+        }
+    }
+
+    &--no-items {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-normal);
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.tag {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold !important;
+
+    &-secondary {
+        background-color: rgba(var(--color-secondary-rgb), 0.25);
+        color: var(--color-secondary);
+    }
+
+    &-success {
+        background-color: rgba(var(--color-success-rgb), 0.25);
+        color: var(--color-success);
+    }
+
+    &-danger {
+        background-color: rgba(var(--color-danger-rgb), 0.25);
+        color: var(--color-danger);
+    }
+}

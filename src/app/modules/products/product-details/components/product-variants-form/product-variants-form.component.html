@@ -1,0 +1,43 @@
+@if (parsedVariants) {
+    <form [formGroup]="form" class="product__variants">
+        @if (parsedVariants['size']) {
+            <div>
+                <div class="variants__container">
+                    <span>Tamaños</span>
+                    <div class="variants__group">
+                        @for (variant of parsedVariants['size']; track variant) {
+                            <app-custom-radio
+                                formControlName="size"
+                                [label]="variant"
+                                [value]="variant"
+                                [id]="variant"
+                                [control]="form.controls['size']"
+                                [isDisabled]="!availableSizes.includes(variant) || isDisabled"
+                                (onValueChange)="changeSelected('color', variant)"
+                            ></app-custom-radio>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        @if (parsedVariants['colorCode']) {
+            <div>
+                <div class="variants__container">
+                    <span>Colores</span>
+                    <div class="variants__group">
+                        @for (variant of parsedVariants['colorCode']; track variant) {
+                            <app-custom-color-radio
+                                formControlName="colorCode"
+                                [radioValue]="variant"
+                                [id]="variant"
+                                [control]="form.controls['colorCode']"
+                                [isDisabled]="!availableColorsHex.includes(variant) || isDisabled"
+                                (onValueChange)="changeSelected('size', variant)"
+                            ></app-custom-color-radio>   
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </form>
+}

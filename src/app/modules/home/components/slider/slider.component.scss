@@ -1,0 +1,45 @@
+.slider {
+  height: 100%;
+  position: relative;
+
+  .carousel {
+    height: 100%;
+
+    ::ng-deep .slick-list,
+    ::ng-deep .slick-track {
+      height: 100%;
+    }
+  }
+
+  &__item img {
+    width: 100%;
+    min-height: 7rem;
+    max-height: 80vh;
+    object-fit: cover;
+    border-radius: var(--spacing-normal);
+  }
+
+  &__action-left,
+  &__action-right {
+    position: absolute;
+    top: 50%;
+    opacity: 0.65;
+    z-index: 1;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    ::ng-deep .btn {
+      border-radius: 50% !important;
+      width: var(--spacing-large);
+      height: var(--spacing-large);
+      padding: var(--spacing-extra-small);
+      justify-content: center;
+    }
+  }
+
+  &__action-right {
+    right: 0;
+  }
+}

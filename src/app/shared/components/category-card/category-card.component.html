@@ -1,0 +1,7 @@
+<div class="category-card" (click)="emitClick()">
+  <img appLazyImage="{{ category.media.media_url | uploads }}" [alt]="category.nombre" class="category-card__image">
+  <div class="category-card__details">
+    <h2 class="category-card__title">{{ category.nombre }}</h2>
+    <!-- <small class="text-dark-50">73 elementos</small> -->
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<section class="brand-carousel">
+  @if (title || subtitle) {
+    <div class="brand-carousel__header">
+      @if (title) {
+        <h2 class="font-large m-0">{{ title }}</h2>
+      }
+      @if (subtitle) {
+        <p class="m-0">{{ subtitle }}</p>
+      }
+    </div>
+  }
+  <ngx-slick-carousel class="carousel" 
+    #slickModal="slick-carousel" 
+    [config]="slideConfig"
+  >
+    @for (brand of brands; track brand.id) {
+      <div ngxSlickItem class="slide" [id]="brand.id +''">
+        <a class="brand-card" [routerLink]="'/productos'" [queryParams]="{ marca: brand.id }">
+          <img class="brand-card__image" appLazyImage="{{ brand.media.media_url | uploads }}" [alt]="brand.nombre">
+        </a>
+      </div>
+    }
+  </ngx-slick-carousel>
+</section>

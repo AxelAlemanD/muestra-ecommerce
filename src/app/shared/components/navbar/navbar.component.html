@@ -1,0 +1,95 @@
+<!-- <div class="free-shipping-alert">
+  <span class="font-small text-light">!Disfruta de envíos gratis a partir de 
+    <strong class="font-small text-light">{{ 1000 | currency:"MXN":"symbol" }}</strong>!
+  </span>
+</div> -->
+<nav class="navbar">
+  <div class="navbar__item navbar__start">
+    <a [routerLink]="['/']" class="d-flex">
+      <img class="navbar__logo" src="assets/images/logo.png" alt="Logotipo Casa Luca">
+    </a>
+    <ul class="navbar__links">
+      <li>
+        <a [routerLink]="['/promociones']" class="navbar__link text-primary">
+          <ion-icon name="flame"></ion-icon>
+          Ofertas
+        </a>
+      </li>
+      @if (categoriesForMegaMenu && categoriesForMegaMenu.length) {
+        <li class="categories">
+          <a class="navbar__link">
+            Categorías
+            <ion-icon name="chevron-down"></ion-icon>
+          </a>
+          <app-megamenu [items]="categoriesForMegaMenu"></app-megamenu>
+        </li>
+      }
+      @if (brands && brands.length) {
+        <li class="brands">
+          <a class="navbar__link">
+            Marcas
+            <ion-icon name="chevron-down"></ion-icon>
+          </a>
+          <app-image-grid [items]="brands"></app-image-grid>
+        </li>
+      }
+    </ul>
+  </div>
+  <div class="navbar__item navbar__center">
+    <!-- <app-custom-button
+      [ngClass]="{'no-branch': !selectedBranch}"
+      [text]="(selectedBranch) ? selectedBranch.nombre : 'Sucursal'"
+      [color]="'medium'"
+      [icon]="'location'"
+      [iconPosition]="'right'"
+      (onClick)="openSelectBranchModal()"
+    ></app-custom-button> -->
+    <!-- <app-custom-control
+      [id]="'search'"
+      [name]="'search'"
+      [type]="'text'"
+      [placeholder]="'Buscar producto...'"
+      [button]="{
+        color: 'medium',
+        icon: 'search'
+      }"
+      (onValueChange)="searchProducts($event)"
+    ></app-custom-control> -->
+    <app-search-product></app-search-product>
+  </div>
+  <div class="navbar__item navbar__end">
+    <div class="cart-indicator">
+      @if (productsQuantityInCart) {
+        <div name="cart-outline" class="cart-indicator__badge badge">
+          {{ productsQuantityInCart }}
+        </div>
+      }
+      <ion-icon name="cart-outline" class="cart-indicator__icon" (click)="redirectTo('mi-carrito')"></ion-icon>
+      <app-cart-preview [ngClass]="{'fix-cart-preview-position': customer}"></app-cart-preview>
+    </div>
+    @if (customer) {
+      <div class="customer-indicator">
+        <ion-icon name="person-circle" class="customer-indicator__icon"></ion-icon>
+        <div class="customer-indicator__details">
+          <strong class="font-normal text-capitalize">{{ customer.nombre }}</strong>
+          <small class="text-dark-50">{{ customer.correo }}</small>
+        </div>
+        <ion-icon name="chevron-down"></ion-icon>
+        <app-customer-options></app-customer-options>
+      </div>
+    } @else {
+      <app-custom-button
+        [text]="'Registrarme'"
+        [color]="'dark'"
+        [fill]="'clear'"
+        (onClick)="redirectTo('/auth/sign-up')"
+      ></app-custom-button>
+      <app-custom-button
+        [text]="'Iniciar sesión'"
+        [color]="'primary'"
+        [fill]="'solid'"
+        (onClick)="redirectTo('/auth/login')"
+      ></app-custom-button>
+    }
+  </div>
+</nav>

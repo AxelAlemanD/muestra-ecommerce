@@ -1,0 +1,65 @@
+@import "../../../../theme/app.variables.scss";
+
+.custom-control {
+
+  height: 100%;
+
+  &__group {
+    flex: 1;
+    display: flex;
+    position: relative;
+    align-items: center;
+  }
+
+  &__alert {
+    position: absolute;
+    right: 0.5rem;
+    cursor: pointer;
+    color: var(--color-danger) !important;
+  }
+
+  &__input {
+    min-height: 36px;
+    height: 100%;
+    border: 0px;
+    border-radius: var(--border-radius);
+    background-color: var(--color-medium);
+    color: var(--color-medium-contrast) !important;
+
+    &:focus {
+      box-shadow: unset;
+    }
+
+    &::placeholder {
+      color: rgba(var(--color-dark-rgb), .3)
+    }
+  }
+
+  &__button ::ng-deep .btn {
+    border-radius: 0 var(--border-radius) var(--border-radius) 0 !important;
+  }
+
+  &--error {
+    border-radius: var(--border-radius);
+    outline: 1px solid var(--color-danger) !important;
+
+    .custom-control__button ::ng-deep .btn {
+      color: var(--color-danger) !important;
+    }
+  }
+}
+
+.input-group {
+  height: 100%;
+
+  &:focus-within {
+    border-radius: var(--border-radius);
+    outline: 1px solid var(--color-secondary);
+  }
+
+  &.has-button {
+    .custom-control__input {
+      border-radius: var(--border-radius) 0 0 var(--border-radius) !important;
+    }
+  }
+}

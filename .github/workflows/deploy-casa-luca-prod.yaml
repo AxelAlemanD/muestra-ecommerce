@@ -1,0 +1,38 @@
+name: Deploy casaluca.com.mx
+
+on:
+  push:
+    branches:
+      - casa-luca
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install SSH Key
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to Vultr
+        run: |
+          ssh -o StrictHostKeyChecking=no root@45.76.57.114 << 'EOF'
+              cd /var/www/casa-luca/casaluca.com.mx
+              git restore angular.json
+              git pull origin casa-luca
+              rm -rf dist
+              curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+              export NVM_DIR="$HOME/.nvm"
+              [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+              [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+              nvm install 18.16.1
+              nvm alias default 18.16.1
+              npm install -g @angular/cli@17.3.7
+              npm install --force
+              ng build --configuration=production
+              sudo service nginx restart
+          EOF

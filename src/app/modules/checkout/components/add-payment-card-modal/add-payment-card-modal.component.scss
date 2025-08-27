@@ -1,0 +1,18 @@
+.add-payment-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-normal);
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-normal);
+  }
+
+  &__loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 13.5rem;
+  }
+}

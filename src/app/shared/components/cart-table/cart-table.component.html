@@ -1,0 +1,165 @@
+<div class="product-table__container">
+  <table class="product-table" [formGroup]="form">
+    <thead class="product-table__header">
+      <tr>
+        @for (column of columns; track column) {
+          <th
+            class="font-small"
+            [width]="
+              (column.type === 'quantity')
+              ? '15%' 
+              : (column.type === 'currency' || column.type === 'number') ? '15%' : ''
+            "
+            [class]="'text-'+column.align"
+          >
+            {{ column.label }}
+          </th>
+        }
+      </tr>
+    </thead>
+    @if (cart) {
+      <tbody class="product-table__body" formArrayName="cartItems">
+        @if (cartItems.length) {
+          @for (cartItem of cartItems.controls; track i; let i = $index) {
+            <tr [formGroupName]="i">
+              @for (column of columns; track column.path) {
+                <td [class]="'text-'+column.align+' text-'+column.color">
+                  @if (column.type === 'currency') {
+                    @if (column.path) {
+                      <span>
+                        {{ cartItem.get(column.path)!.value | currency:"MXN":"symbol" }}
+                        @if (column.path == 'precio' && cartItem.value['cantidad_descuento']) {
+                          <small class="product-table__discount">
+                              @if (cartItem.value['tipo_descuento'] === DiscountTypeEnum.PERCENTAGE) {
+                                -{{ cartItem.value['cantidad_descuento'] }}% OFF
+                              } @else {
+                                -{{ cartItem.value['cantidad_descuento'] | currency }} OFF
+                              }
+                          </small>
+                        }
+                      </span>
+                    }
+                  } @else if (column.type === 'number') {
+                    @if (column.path) {
+                      {{ cartItem.get(column.path)!.value }}
+                    }
+                  } @else if (column.type === 'product') {
+                    <div class="product-table__product">
+                      <img appLazyImage="{{ cartItem.value['media'] | uploads }}" [alt]="cartItem.value['nombre']" class="product__media">
+                      <div class="product__details">
+                        @if (cartItem.value['promocion_id']) {
+                          <div class="tag tag-promotion">
+                            <ion-icon name="flame" class="text-primary"></ion-icon>
+                            <span class="tag__text">Promoción</span>
+                          </div>
+                        }
+                        <h2 class="product__title">
+                          <a [routerLink]="['/productos', cartItem.value['producto_id']]" [queryParams]="{ variante: cartItem.value['variante_id'] }" class="fw-bold">
+                            {{ cartItem.value['nombre'] }}
+                          </a>
+                        </h2>
+                        <small class="font-small">SKU: {{ cartItem.value['sku'] }}</small>
+                      </div>
+                    </div>
+                  } @else if (column.type === 'quantity') {
+                    <app-custom-quantity-control
+                      formControlName="cantidad"
+                      [id]="'cart-item-preview' + cartItem.value['producto_id'] + cartItem.value['variante_id']"
+                      [name]="'cart-item-preview' + cartItem.value['producto_id'] + cartItem.value['variante_id']"
+                      [control]="cartItem.get('cantidad')!"
+                      [max]="cartItem.value['stock']"
+                      (onValueChange)="updateCartItem(i, $event)"
+                    ></app-custom-quantity-control>
+                  } @else if (column.type === 'status') {
+                    <small
+                      class="tag"
+                      [ngClass]="{
+                        'tag-secondary': cartItem.value['estado_id'] >= OrderStatusEnum.PENDING && cartItem.value['estado_id'] <= OrderStatusEnum.RESCHEDULED,
+                        'tag-success': cartItem.value['estado_id'] == OrderStatusEnum.DELIVERED,
+                        'tag-danger': cartItem.value['estado_id'] > OrderStatusEnum.DELIVERED,
+                      }"
+                    >
+                      {{ cartItem.value['estado_id'] | orderStatus }}
+                    </small>
+                  } @else {
+                    @if (column.path) {
+                      {{ cartItem.get(column.path)!.value }}
+                    }
+                  }
+                </td>
+              }
+            </tr>
+          }
+        }
+
+        <!-- PROMOCIONES -->
+         @for (cartPromotion of cartPromotions.controls; track i; let i = $index) {
+          <tr>
+            @for (column of columns; track column.path) {
+              <td [class]="'text-'+column.align+' text-'+column.color">
+                @if (column.type === 'currency') {
+                  @if (column.path) {
+                    <span>
+                      {{ cartPromotion.get(column.path)!.value | currency:"MXN":"symbol" }}
+                      @if (column.path == 'precio' && cartPromotion.value['cantidad_descuento']) {
+                        <small class="product-table__discount">
+                            @if (cartPromotion.value['tipo_descuento'] === DiscountTypeEnum.PAQUETES_VALOR_FIJO) {
+                                -{{ cartPromotion.value['cantidad_descuento'] | currency }} OFF
+                            } @else if (cartPromotion.value['tipo_descuento'] === DiscountTypeEnum.PAQUETES_PORCENTAJE) {
+                                -{{ cartPromotion.value['cantidad_descuento'] }}% OFF
+                            } @else if (cartPromotion.value['tipo_descuento'] === DiscountTypeEnum.DOS_POR_UNO) {
+                              2x1
+                            } @else if (cartPromotion.value['tipo_descuento'] === DiscountTypeEnum.DESCUENTO_50) {
+                              50% OFF
+                            }
+                        </small>
+                      }
+                    </span>
+                  }
+                } @else if (column.type === 'quantity') {
+                  <app-custom-button
+                    [text]="'Remover'"
+                    [icon]="'trash'"
+                    [fill]="'outline'"
+                    [color]="'primary'"
+                    (onClick)="removePromotion(cartPromotion.value['producto_id'])"
+                  ></app-custom-button>
+                } @else if (column.type === 'number') {
+                  @if (column.path) {
+                    {{ cartPromotion.get(column.path)!.value }}
+                  }
+                } @else if (column.type === 'product') {
+                  <div class="product-table__product">
+                    <img appLazyImage="{{ cartPromotion.value['media'] | uploads }}" [alt]="cartPromotion.value['nombre']" class="product__media">
+                    <div class="product__details">
+                      <h2 class="product__title">
+                        <a [routerLink]="['/promociones', cartPromotion.value['producto_id']]" class="fw-bold">
+                          {{ cartPromotion.value['nombre'] }}
+                        </a>
+                      </h2>
+                    </div>
+                  </div>
+                } @else if (column.type === 'status') {
+                  <small
+                    class="tag"
+                    [ngClass]="{
+                      'tag-secondary': cartPromotion.value['estado_id'] >= OrderStatusEnum.PENDING && cartPromotion.value['estado_id'] <= OrderStatusEnum.RESCHEDULED,
+                      'tag-success': cartPromotion.value['estado_id'] == OrderStatusEnum.DELIVERED,
+                      'tag-danger': cartPromotion.value['estado_id'] > OrderStatusEnum.DELIVERED,
+                    }"
+                  >
+                    {{ cartPromotion.value['estado_id'] | orderStatus }}
+                  </small>
+                } @else {
+                  @if (column.path) {
+                    {{ cartPromotion.get(column.path)!.value }}
+                  }
+                }
+              </td>
+            }
+          </tr>
+         }
+      </tbody>
+    }
+  </table>
+</div>

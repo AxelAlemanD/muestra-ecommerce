@@ -1,0 +1,83 @@
+<div class="promotion-card">
+  @if (promotion.media) {
+  <div class="promotion-card__header">
+      <img appLazyImage="{{ promotion.media.media_url | uploads }}" [alt]="promotion.titulo" class="promotion-card__header-image">
+      <div class="promotion-card__header-actions">
+          <div class="promotion-card__header-tags">
+              <div class="tag">
+                  <ion-icon name="flame" class="text-primary"></ion-icon>
+                  <span class="tag__text">Promoción</span>
+              </div>
+          </div>
+          <app-custom-button 
+              class="promotion-card__header-preview"
+              [icon]="'scan'"
+              [fill]="'clear'"
+              [color]="'dark'"
+              (onClick)="openQuickviewModal()"
+          ></app-custom-button>
+      </div>
+  </div>
+}
+  <div class="promotion-card__content">
+      <h2 class="promotion-card__title">
+          <a [routerLink]="['/promociones', promotion.id]">{{ promotion.titulo }}</a>
+      </h2>
+  </div>
+
+  <form class="promotion-card__footer" [formGroup]="form">
+      <div class="promotion-card__footer-price">
+          <small class="text-dark-50 text-line-through">{{ promotion.total_original | currency:"MXN":"symbol" }}</small>
+          <strong class="text-primary font-normal fw-bold">
+            {{ promotion.total_con_descuento | currency:"MXN":"symbol" }}
+            <small class="promotion-card__footer-discount">
+                @if (promotion.tipo_descuento === DiscountTypeEnum.PAQUETES_VALOR_FIJO) {
+                    -{{ promotion.cantidad_descuento | currency }} OFF
+                } @else if (promotion.tipo_descuento === DiscountTypeEnum.PAQUETES_PORCENTAJE) {
+                    -{{ promotion.cantidad_descuento }}% OFF
+                } @else if (promotion.tipo_descuento === DiscountTypeEnum.DOS_POR_UNO) {
+                  2x1
+                } @else if (promotion.tipo_descuento === DiscountTypeEnum.DESCUENTO_50) {
+                  50% OFF
+                }
+            </small>
+        </strong>
+      </div>
+      <ng-container *ngIf="cartItem$ | async as cartItem; else addButton">
+        <app-custom-button
+            [text]="'Remover'"
+            [icon]="'trash'"
+            [fill]="'outline'"
+            [color]="'primary'"
+            (onClick)="removeCartItem(cartItem)"
+        ></app-custom-button>
+      </ng-container>
+    
+    <ng-template #addButton>
+        <app-custom-button
+            [text]="(promotion.activo) ? 'Agregar' : 'No disponible'"
+            [icon]="(promotion.activo) ? 'cart' : ''"
+            [fill]="'opacity'"
+            [color]="'primary'"
+            [isLoading]="isLoading"
+            [isDisabled]="!promotion.activo"
+            (onClick)="addToCart()"
+        ></app-custom-button>
+    </ng-template>
+      <!--
+        @if (cartItem && cartItem.cantidad > 0) {
+            <app-custom-quantity-control
+              formControlName="quantity"
+              [id]="'promotion-card' + promotion.id"
+              [name]="'promotion-card' + promotion.id"
+              [control]="form.controls['quantity']"
+              (onValueChange)="updateCartItem($event)"
+            ></app-custom-quantity-control>
+        }
+      -->
+  </form>
+</div>
+
+<!-- <a class="promotion-card" [href]="promotion.url">
+  <img class="promotion-card__image" src="{{ promotion.media.media_url | uploads }}" [alt]="promotion.media.media_url">
+</a> -->

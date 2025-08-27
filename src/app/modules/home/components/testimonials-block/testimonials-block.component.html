@@ -1,0 +1,35 @@
+@if (items && items.length) {
+  <section class="testimonials-block">
+    @if (title) {
+      <div class="testimonials-block__header text-center">
+        <h2 class="font-large m-0">{{ title }}</h2>
+      </div>
+    }
+    <ngx-slick-carousel class="carousel" 
+        #slickModal="slick-carousel" 
+        [config]="slideConfig"
+      >
+      @for (item of items; track item.id) {
+        <div ngxSlickItem class="slide" [id]="item.id +''">
+          <div class="testimonial">
+            <div class="testimonial__header">
+              <strong>{{ item.customer }}</strong>
+              <div class="testimonial__rate">
+                <ion-icon *ngFor="let i of [1,2,3,4,5]" [name]="(item.rate >= i) ? 'star' : 'star-outline'"></ion-icon>
+              </div>
+            </div>
+            <div class="testimonial__content">
+              <p class="m-0">{{ item.opinion }}</p>
+            </div>
+            <div class="testimonial__footer">
+              <img class="testimonial__logo" src="assets/images/logo.png" alt="Logotipo Casa Luca">
+              <small class="text-dark-50">
+                {{ item.date | date: "d 'de' MMMM, y" }}
+              </small>
+            </div>
+          </div>
+        </div>
+      }
+    </ngx-slick-carousel>
+  </section>
+}

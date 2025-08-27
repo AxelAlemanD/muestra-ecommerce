@@ -1,0 +1,27 @@
+<app-modal-base
+  [title]="'Dirección de entrega'"
+  [confirmBtnText]="'Guardar selección'"
+  (onConfirm)="confirmSelected()"
+>
+  <div class="select-delivery-address">
+    <app-custom-button
+      [text]="'Agregar'"
+      [color]="'dark'"
+      [icon]="'add'"
+      [fill]="'clear'"
+      (onClick)="openAddressFormModal()"
+    ></app-custom-button>
+    <form class="select-delivery-address__options" [formGroup]="form">
+      @for (option of options; track option.id) {
+        <app-custom-radio-item
+          formControlName="option"
+          [id]="'option-'+option.id"
+          [radioValue]="option.id"
+          [title]="option.alias"
+          [content]="option.resumen!"
+          [control]="form.controls['option']"
+        ></app-custom-radio-item>
+      }
+    </form>
+  </div>
+</app-modal-base>

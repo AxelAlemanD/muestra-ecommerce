@@ -1,0 +1,51 @@
+<app-modal-base
+  [confirmBtnText]="'Guardar selección'"
+  (onConfirm)="confirmSelectedBranch()"
+>
+<form class="select-branch" [formGroup]="form">
+  <app-custom-control
+    [id]="'search'"
+    [name]="'search'"
+    [type]="'text'"
+    [placeholder]="'Buscar sucursal por nombre, código postal...'"
+    [button]="{
+      color: 'medium',
+      icon: 'search'
+    }"
+    (onValueChange)="searchBranches($event)"
+  ></app-custom-control>
+  @for (branch of filteredBranches; track branch.id) {
+    <app-custom-radio-item
+      formControlName="branch"
+      [id]="'branch-'+branch.id"
+      [radioValue]="branch.id"
+      [title]="branch.nombre"
+      [content]="branch.direccion"
+      [control]="form.controls['branch']"
+    ></app-custom-radio-item>
+  }
+  @if (!filteredBranches || !filteredBranches.length) {
+    <div class="no-branches-found">
+      <div class="no-branches-found__message">
+        <img class="no-branches-found__image" src="assets/images/sad-dog.svg" alt="Perrito triste">
+        <strong class="text-dark-50">Lo sentimos, no encontramos ninguna coincidencia</strong>
+      </div>
+      <div class="no-branches-found__alternatives">
+        <small>Puedes seleccionar alguna de nuestras otras sucursales</small>
+        <div class="no-branches-found__alternatives-list">
+          @for (branch of branches; track branch.id) {
+            <app-custom-radio-item
+              formControlName="branch"
+              [id]="'branch-'+branch.id"
+              [radioValue]="branch.id"
+              [title]="branch.nombre"
+              [content]="branch.direccion"
+              [control]="form.controls['branch']"
+            ></app-custom-radio-item>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</form>
+</app-modal-base>

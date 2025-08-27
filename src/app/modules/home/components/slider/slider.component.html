@@ -1,0 +1,26 @@
+<section class="slider">
+  <app-custom-button
+    class="slider__action-left"
+    [icon]="'arrow-back'"
+    [fill]="'solid'"
+    [color]="'light'"
+    (onClick)="prevSlide()"
+  ></app-custom-button>
+  <app-custom-button
+    class="slider__action-right"
+    [icon]="'arrow-forward'"
+    [fill]="'solid'"
+    [color]="'light'"
+    (onClick)="nextSlide()"
+  ></app-custom-button>
+  <ngx-slick-carousel class="carousel" 
+    #slickModal="slick-carousel" 
+    [config]="slideConfig"
+  >
+    @for (item of items; track item.id) {
+      <a ngxSlickItem [id]="item.id +''" [href]="item.url" class="slide slider__item">
+        <img appLazyImage="{{ item.media.media_url | uploads }}" [alt]="item.media.media_url">
+      </a>
+    }
+  </ngx-slick-carousel>
+</section>

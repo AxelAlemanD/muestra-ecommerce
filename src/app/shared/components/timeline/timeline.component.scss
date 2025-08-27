@@ -1,0 +1,36 @@
+.timeline {
+  display: flex;
+  align-items: center;
+
+  &__item {
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    padding: 0.5rem;
+    background-color: var(--color-primary);
+
+    &__icon {
+      color: var(--color-primary-contrast);
+      font-size: var(--font-size-large);
+    }
+
+    &--active,
+    &--complete {
+      opacity: 1;
+    }
+  }
+
+  &__separator {
+    width: 100%;
+    min-width: 1rem;
+    opacity: 0.5;
+    border: 2px solid var(--color-primary);
+
+    &--active,
+    &--complete {
+      opacity: 1;
+    }
+  }
+}

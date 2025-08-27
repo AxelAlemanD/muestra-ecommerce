@@ -1,0 +1,54 @@
+<main class="pet-list">
+    <section class="pet-list__container">
+      <div class="pet-list__header">
+        <h2 class="font-large fw-bold m-0 text-dark">Mis mascotas</h2>
+        <app-custom-button
+          [text]="'Agregar mascota'"
+          [fill]="'solid'"
+          [color]="'primary'"
+          (onClick)="redirectTo('/perfil/mis-mascotas/agregar')"
+        ></app-custom-button>
+      </div>
+      @for (pet of pets; track pet.id) {
+        <div class="pet-list__items">
+          <div class="pet-list__item">
+            <div class="pet-list__item__details">
+              <img appLazyImage="{{ pet.media_url | uploads }}" alt="foto de mascota">
+              <div class="d-flex flex-column justify-content-center gap-2">
+                <h4 class="font-normal fw-bold m-0">{{ pet.nombre }}</h4>
+                <div class="d-flex gap-2">
+                  <div class="d-flex gap-1 text-dark-50">
+                    <ion-icon name="paw"></ion-icon>
+                    <small class="text-dark-50">{{ pet.especie }}</small>
+                  </div>
+                  <div class="d-flex gap-1 text-dark-50">
+                    <ion-icon name="male-female"></ion-icon>
+                    <small class="text-dark-50">{{ pet.genero }}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pet-list__item__actions">
+              <app-custom-button
+                [text]="'Actualizar'"
+                [fill]="'solid'"
+                [color]="'primary'"
+                (onClick)="redirectTo('/perfil/mis-mascotas/editar/'+pet.id)"
+              ></app-custom-button>
+              <app-custom-button
+                [text]="'Eliminar'"
+                [fill]="'outline'"
+                [color]="'primary'"
+                (onClick)="deletePet(pet)"
+              ></app-custom-button>
+            </div>
+          </div>
+        </div>
+      }
+      @if (!pets.length) {
+        <div class="pet-list__items--no-items">
+          <p>No hay mascotas registradas</p>
+        </div>
+      }
+    </section>
+  </main>

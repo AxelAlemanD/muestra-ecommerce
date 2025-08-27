@@ -1,0 +1,184 @@
+@import "../../../../theme/app.variables.scss";
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: var(--spacing-normal);
+  align-items: stretch;
+  background-color: var(--color-light);
+
+  &__item {
+    flex: 1;
+    gap: var(--spacing-normal);
+    display: flex;
+  }
+
+  &__start {
+    justify-content: flex-start;
+  }
+
+  &__center {
+    display: flex;
+    gap: var(--spacing-extra-small);
+    justify-content: center;
+
+    app-custom-button {
+      width: 30%;
+
+      &::ng-deep {
+        .btn {
+          justify-content: space-between;
+        }
+
+        .btn__icon {
+          color: rgba(var(--color-dark-rgb), .5);
+          font-size: var(--font-size-normal);
+        }
+      }
+    }
+
+    app-custom-control {
+      // width: 70%;
+      width: 100%
+    }
+
+    app-search-product {
+      flex: 1;
+    }
+  }
+
+  &__end {
+    align-items: center;
+    justify-content: flex-end;
+
+    .cart-indicator {
+      display: flex;
+      height: 100%;
+      cursor: pointer;
+      position: relative;
+      align-items: center;
+
+      &__icon {
+        font-size: var(--font-size-subtitle);
+        color: var(--text-color)
+      }
+
+      &__badge {
+        top: 0;
+        right: -0.3rem
+      }
+
+      &:hover app-cart-preview {
+        visibility: visible;
+        opacity: 1;
+        transform: rotateX(0);
+      }
+    }
+
+    .customer-indicator {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-small);
+
+      &__icon {
+        font-size: var(--font-size-subtitle);
+        color: var(--text-color);
+      }
+
+      &__details {
+        display: flex;
+        flex-direction: column;
+      }
+
+      ion-icon {
+        color: var(--text-color);
+      }
+
+      &:hover app-customer-options {
+        visibility: visible;
+        opacity: 1;
+        transform: rotateX(0);
+      }
+    }
+  }
+
+  &__logo {
+    width: 5rem;
+    object-fit: contain;
+  }
+
+  &__links {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    gap: var(--spacing-normal);
+    list-style: none;
+  }
+
+  &__link {
+    font-size: var(--font-size-small);
+    text-decoration: none;
+    cursor: pointer;
+    display: flex;
+    gap: var(--spacing-extra-small);
+    align-items: center;
+
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  li {
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.brands:hover app-image-grid,
+.categories:hover app-megamenu {
+  visibility: visible;
+  opacity: 1;
+  transform: rotateX(0);
+}
+
+app-image-grid,
+app-megamenu,
+app-cart-preview,
+app-customer-options {
+  opacity: 0;
+  visibility: hidden;
+  transform-origin: top;
+  transform: rotateX(45deg);
+  transition: transform .2s, opacity .2s;
+  position: absolute;
+  top: 3.3rem;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    display: block;
+  }
+}
+
+app-cart-preview {
+  top: 2.3rem;
+}
+
+.fix-cart-preview-position {
+  left: -50px;
+
+  @media (min-width: 1024px) {
+    // left: -75px;
+    left: -100px;
+  }
+}
+
+.free-shipping-alert {
+  text-align: center;
+  background-color: var(--color-danger);
+}

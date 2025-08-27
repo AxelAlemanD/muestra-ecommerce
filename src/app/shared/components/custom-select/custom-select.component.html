@@ -1,0 +1,61 @@
+<div class="custom-select">
+  @if (label) {
+    <label for="{{ id }}" class="font-small">
+        {{ label }}
+        @if (!isRequired) {
+          <small class="small-font text-gray"> (opcional) </small>
+        }
+    </label>
+  }
+  <div
+    class="input-group"
+    [ngClass]="{
+      'has-button': button,
+      'custom-select--error': control && control.invalid && (control.dirty || control.touched)
+    }"
+  >
+    <div class="custom-select__group">
+      <ng-select
+        id="{{ name }}"
+        bindLabel="{{ bindLabel }}"
+        bindValue="{{ bindValue }}"
+        class="custom-select__input font-small"
+        placeholder="{{ placeholder }}"
+        #select
+        [(ngModel)]="value"
+        (ngModelChange)="onChange($event)"
+        [items]="items"
+        [clearable]="isClearable"
+        [searchable]="isSearchable"
+        (blur)="onTouched($event)"
+        (change)="emitChange($event)"
+        (clear)="emitClear($event)"
+        (search)="emitInput($event)"
+        [readonly]="isReadonly"
+        [multiple]="isMultiple"
+        [addTagText]="'Agregar nuevo elemento'"
+        [notFoundText]="'No se encontraron elementos'"
+        [searchFn]="searchFn"
+      >
+        <ng-content></ng-content>
+      </ng-select>
+      @if (control && control.invalid && (control.dirty || control.touched)) {
+        <ion-icon
+          class="custom-select__alert"
+          name="alert-circle"
+          data-title="{{ errorMessages | validation: { name: label, type: 'text' } : control.errors }}"
+        ></ion-icon>
+      }
+    </div>
+    @if (button) {
+      <app-custom-button
+        class="custom-select__button"
+        (onclick)="emitClick()"
+        [text]="button.text ?? ''"
+        [icon]="button.icon ?? ''"
+        [color]="button.color"
+        [isDisabled]="isDisabled"
+      ></app-custom-button>
+    }
+  </div>
+</div>

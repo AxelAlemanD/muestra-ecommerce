@@ -1,0 +1,34 @@
+@if (items && items.length) {
+  <section class="faq-block">
+    @if (title) {
+      <div class="faq-block__header">
+        <h2 class="font-large m-0 text-dark">{{ title }}</h2>
+      </div>
+    }
+    <div class="faq-block__content">
+      @for (item of items; track item.id; let isFirst = $first) {
+        <div class="accordion-item faq-item">
+          <div class="accordion-header faq-item__header" [id]="'question-'+item.id">
+            <button class="accordion-button fw-bold text-dark" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#answer-'+item.id" aria-expanded="true" [attr.aria-controls]="'answer-'+item.id">
+              {{ item.question }}
+            </button>
+          </div>
+          <div
+            [id]="'answer-'+item.id"
+            class="accordion-collapse collapse "
+            [attr.aria-labelledby]="'question-'+item.id"
+            data-bs-parent="#accordionExample"
+            [ngClass]="{'show': isFirst}"
+          >
+            <div class="accordion-body faq-item__content">
+              <p>{{ item.answer }}</p>
+            </div>
+            <div class="faq-item__footer">
+              <img class="faq-item__logo" src="assets/images/logo.png" alt="Logotipo Casa Luca">
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+}

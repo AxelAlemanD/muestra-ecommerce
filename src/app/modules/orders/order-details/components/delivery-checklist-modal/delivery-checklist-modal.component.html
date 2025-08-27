@@ -1,0 +1,34 @@
+<app-modal-base
+  [title]="'Checklist de entrega'"
+  [buttons]="buttons"
+>
+  <form class="delivery-checklist-modal" [formGroup]="form">
+    <div class="delivery-checklist-modal__note">
+      <ion-icon name="alert-circle" class="text-secondary font-subtitle"></ion-icon>
+      <p class="m-0 font-small">
+        Al dar click en <b>"Confirmar entrega"</b>, confirmas que recibiste todos los productos marcados en esta lista. Si recibiste tu pedido incompleto, da click en <b>"Pedido incompleto"</b> y de inmediato nos comunicaremos al telefono enlazado a tu perfil.
+      </p>
+    </div>
+    <div class="delivery-checklist-modal__options" [formGroup]="form" formArrayName="items">
+      @for (group of items.controls; track i; let i = $index) {
+        <div class="delivery-checklist-modal__options__item" [formGroupName]="i">
+          <img src="{{ group.get('media')!.value | uploads }}" [alt]="group.get('nombre')!.value" class="delivery-checklist-modal__options__item__media">
+          <div class="delivery-checklist-modal__options__item__details">
+            <h2 class="delivery-checklist-modal__options__item__title">
+              <a [routerLink]="['/productos', group.get('producto_id')!.value]" class="fw-bold">
+                {{ group.get('nombre')!.value }}
+              </a>
+            </h2>
+            <small class="font-small">{{ group.get('cantidad')!.value }} {{ (group.get('cantidad')!.value == 1) ? 'unidad' : 'unidades' }}</small>
+          </div>
+          <app-custom-checkbox
+            formControlName="recibido"
+            [value]="true"
+            [id]="'recibido'"
+            [control]="group.get('recibido')"
+          ></app-custom-checkbox>
+        </div>
+      }
+    </div>
+  </form>
+</app-modal-base>

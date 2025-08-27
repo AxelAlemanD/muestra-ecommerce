@@ -1,0 +1,60 @@
+<section class="product-group">
+  <div class="product-group__header">
+    <h2 class="font-large m-0">{{ title }}</h2>
+    <ul class="product-group__header-categories">
+      @for (group of groups; track group.category.id) {
+        <li
+          button
+          class="product-group__header-categories__item"
+          [ngClass]="{'product-group__header-categories__item--active': activeGroup.category.id === group.category.id}"
+        >
+          <app-custom-button
+            [text]="group.category.nombre"
+            [fill]="'clear'"
+            [color]="(activeGroup.category.id === group.category.id) ? 'primary' : 'dark'"
+            (onClick)="changeActiveGroup(group)"
+          ></app-custom-button>
+        </li>
+      }
+    </ul>
+  </div>
+  <div class="product-group__content">
+    @if (style === 'grid') {
+      <div class="product-group__content-grid">
+        @for (product of activeGroup.products; track product.id) {
+          <app-product-card [productId]="product.id"></app-product-card>
+        }
+      </div>
+    } @else if (style === 'carousel') {
+      <div class="product-group__content-carousel">
+        <app-custom-button
+          class="product-group__content-carousel__action-left"
+          [icon]="'arrow-back'"
+          [fill]="'solid'"
+          [color]="'medium'"
+          (onClick)="prevSlide()"
+        ></app-custom-button>
+        <app-custom-button
+          class="product-group__content-carousel__action-right"
+          [icon]="'arrow-forward'"
+          [fill]="'solid'"
+          [color]="'medium'"
+          (onClick)="nextSlide()"
+        ></app-custom-button>
+        @if (slideConfig && showCarousel) {
+          <ngx-slick-carousel
+            class="carousel" 
+            #slickModal="slick-carousel" 
+            [config]="slideConfig"
+          >
+            @for (product of activeGroup.products; track product.id) {
+              <div ngxSlickItem [id]="product.id +''">
+                <app-product-card [productId]="product.id"></app-product-card>
+              </div>
+            }
+          </ngx-slick-carousel>
+        }
+      </div>
+    }
+  </div>
+</section>

@@ -1,0 +1,118 @@
+.mobile-sidemenu {
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    width: 19rem;
+    height: 100%;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    transform: translate(-100%);
+    background-color: var(--background-color);
+    border-right: 1px solid var(--color-medium);
+    transition: transform .25s cubic-bezier(.25, .46, .45, .94);
+    will-change: transform;
+    overflow: hidden;
+
+    &--open {
+      transform: translate(0);
+    }
+  }
+
+  &__backdrop {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    background-color: rgba(var(--color-dark-rgb), .65);
+    opacity: 0;
+    will-change: opacity;
+    transition: opacity .25s cubic-bezier(.25, .46, .45, .94);
+
+    &--active {
+      opacity: 1;
+    }
+  }
+
+  &__header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: var(--spacing-normal) 0;
+    border-bottom: 1px solid var(--color-medium);
+  }
+
+  &__button {
+    position: absolute;
+
+    &.right {
+      right: 0;
+    }
+
+    &.left {
+      left: 0;
+    }
+
+    ::ng-deep .btn__icon {
+      font-size: var(--font-size-normal);
+      color: rgba(var(--color-dark-rgb), .5);
+    }
+  }
+
+  &__indicators {
+    display: flex;
+    flex-wrap: wrap;
+    padding: var(--spacing-normal) 0;
+    border-bottom: 1px solid var(--color-medium);
+
+    .indicators__item ::ng-deep .btn {
+      gap: var(--spacing-extra-small) !important;
+      flex-direction: column;
+      color: rgba(var(--color-dark-rgb), .5) !important;
+
+      .btn__icon {
+        color: var(--color-dark) !important;
+        font-size: var(--font-size-large);
+      }
+    }
+
+    .cart-indicator {
+      display: flex;
+      position: relative;
+
+      &__badge {
+        top: 0;
+        right: 1.25rem
+      }
+    }
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 0;
+    padding: var(--spacing-normal);
+    gap: var(--spacing-normal);
+  }
+
+  &__link a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    ion-icon {
+      color: rgba(var(--color-dark-rgb), .5);
+    }
+  }
+
+  &__logout {
+    color: var(--color-danger);
+    text-decoration: none;
+    padding: var(--spacing-normal);
+  }
+}

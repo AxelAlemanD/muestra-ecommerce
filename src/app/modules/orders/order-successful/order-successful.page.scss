@@ -1,0 +1,26 @@
+.order-successful {
+
+  padding-inline: calc(var(--spacing-extra-large) * 4);
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-medium);
+  }
+
+  &__note {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-small);
+    padding: var(--spacing-normal);
+    border-radius: var(--border-radius);
+    background-color: rgba(var(--color-secondary-rgb), .2);
+  }
+
+  &__actions {
+    display: flex;
+    gap: var(--spacing-normal);
+  }
+}

@@ -1,0 +1,12 @@
+<section class="product-grid">
+  @if (title) {
+    <div class="product-grid__header">
+      <h2 class="font-large m-0">{{ title }}</h2>
+    </div>
+  }
+  <div class="product-grid__content">
+    @for (product of products; track product.id) {
+      <app-product-card [productId]="product.id"></app-product-card>
+    }
+  </div>
+</section>

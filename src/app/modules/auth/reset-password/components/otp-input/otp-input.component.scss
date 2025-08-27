@@ -1,0 +1,8 @@
+.otp-input {
+  display: flex;
+  gap: var(--spacing-normal);
+
+  &__control ::ng-deep .custom-control__input {
+    text-align: center;
+  }
+}

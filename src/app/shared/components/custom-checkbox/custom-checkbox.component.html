@@ -1,0 +1,22 @@
+<div
+  class="custom-checkbox form-check"
+  (click)="onChange(value); emitClick();"
+>
+  @if (label) {
+    <label class="custom-checkbox__label form-check-label" [for]="id">
+      {{ label }}
+    </label>
+  }
+  <input
+    #input
+    class="custom-checkbox__input form-check-input"
+    type="checkbox"
+    [id]="id"
+    [value]="value"
+    [disabled]="isDisabled"
+    [(ngModel)]="innerValue"
+    (ngModelChange)="onChange($event);"
+    (blur)="onTouched($event); onBlur();"
+    (focus)="onFocused()"
+  >
+</div>

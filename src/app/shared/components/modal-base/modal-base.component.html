@@ -1,0 +1,34 @@
+<div class="modal">
+  @if (title || hasHideBtn) {
+    <div class="modal__header">
+      @if (title) {
+        <h4 class="font-large"> {{ title }} </h4>
+      }
+      @if (hasHideBtn) {
+        <app-custom-button
+          [ngClass]="{'only-close-btn': !title}"
+          [color]="'dark'"
+          [icon]="'close'"
+          [fill]="'clear'"
+          (onClick)="hideModal()"
+        ></app-custom-button>
+      }
+    </div>
+  }
+  <div class="modal__content">
+    <ng-content></ng-content>
+  </div>
+  @if (buttons && buttons.length) {
+    <div class="modal__footer">
+      @for (button of buttons; track $index) {
+        <app-custom-button
+          [text]="button.text!"
+          [color]="button.color!"
+          [fill]="button.fill!"
+          [isDisabled]="button.role === 'confirm' && disableConfirmBtn"
+          (onClick)="button.action ? button.action() : null"
+        ></app-custom-button>
+      }
+    </div>
+  }
+</div>

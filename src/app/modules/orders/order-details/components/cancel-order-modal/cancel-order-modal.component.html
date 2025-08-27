@@ -1,0 +1,23 @@
+<app-modal-base
+  [title]="'Cancelar compra'"
+  [confirmBtnText]="'Cancelar compra'"
+  [disableConfirmBtn]="!form.valid"
+  (onConfirm)="cancelOrder()"
+>
+  <form class="row" [formGroup]="form">
+    <div class="col-12">
+      <p>Para confirmar la cancelación de tu pedido, por favor ingresa los últimos 4 dígitos de tu número de orden: <b>{{ folio }}</b> </p>
+    </div>
+    <div class="col-12">
+      <app-custom-control
+        formControlName="code"
+        [id]="'code'"
+        [name]="'code'"
+        [type]="'text'"
+        [placeholder]="'Ingresa el valor solicitado'"
+        [control]="form.controls['code']"
+        [minLength]="4"
+      ></app-custom-control>
+    </div>
+  </form>
+</app-modal-base>

@@ -1,0 +1,30 @@
+<ul class="customer-options">
+  <li class="customer-options__item">
+    <a [routerLink]="['/perfil']">
+      Mi perfil
+    </a>
+  </li>
+  <li class="customer-options__item">
+    <a [routerLink]="['/mis-pedidos']">
+      Mis pedidos
+    </a>
+  </li>
+  <li class="customer-options__item">
+    <a [routerLink]="['/perfil/mis-mascotas']">
+      Mis mascotas
+    </a>
+  </li>
+  <li class="customer-options__item">
+    <a [routerLink]="['/perfil/mis-direcciones']">
+      Mis direcciones
+    </a>
+  </li>
+  <li class="customer-options__item">
+    <a [routerLink]="['/perfil/cambiar-credenciales']">
+      Cambiar contraseña
+    </a>
+  </li>
+  <li class="customer-options__item text-primary" (click)="logout()">
+    <a>Cerrar sesión</a>
+  </li>
+</ul>

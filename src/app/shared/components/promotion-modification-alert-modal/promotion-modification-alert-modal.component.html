@@ -1,0 +1,24 @@
+<app-modal-base
+  [buttons]="buttons"
+>
+  <div class="promotion-modification-alert-modal">
+    <p [innerHTML]="message"></p>
+    @for (promotion of promotions; track promotion.id) {
+      <app-promotion-card
+        class="promotion-modification-alert-modal__item"
+        [promotionId]="promotion.id"
+      ></app-promotion-card>
+    }
+    @if (relatedProducts && relatedProducts.length) {
+      <div class="d-flex flex-column">
+        <p class="m-0">O puedes agregar un producto similar:</p>
+        <app-product-carousel
+          [title]="''"
+          [products]="relatedProducts"
+          [autoplay]="true"
+          [size]="'small'"
+        ></app-product-carousel>
+      </div>
+    }
+  </div>
+</app-modal-base>

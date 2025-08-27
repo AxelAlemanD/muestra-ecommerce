@@ -1,0 +1,12 @@
+<ul class="breadcrumb">
+  @for (item of items; track item.url; let isLast = $last) {
+    <li class="breadcrumb__item">
+      <a [routerLink]="[item.url]" class="btn btn-clear text-capitalize">{{ item.label }}</a>
+    </li>
+    @if (!isLast) {
+      <li class="breadcrumb__separator">
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </li>
+    }
+  }
+</ul>

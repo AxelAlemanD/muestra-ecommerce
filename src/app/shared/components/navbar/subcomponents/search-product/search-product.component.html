@@ -1,0 +1,70 @@
+<form class="search-product" [formGroup]="form">
+  <app-custom-control
+    formControlName="search"
+    class="search-product__control"
+    [id]="'search'"
+    [name]="'search'"
+    [type]="'text'"
+    [placeholder]="'Buscar producto...'"
+    [button]="{
+      color: 'medium',
+      icon: 'search'
+    }"
+    [control]="form.controls['search']"
+    (onFocus)="showResults = true;"
+    (onLossFocus)="hideResults()"
+    (onValueChange)="filterProducts($event); showResults = true;"
+  ></app-custom-control>
+  <div
+    class="search-product__results"
+    [ngClass]="{
+      'search-product__results--no-items': !filteredProducts.length,
+      'search-product__results--visible': showResults
+    }"
+    (mouseleave)="showResults = false"
+  >
+    @if (filteredProducts.length) {
+      @for (product of filteredProducts; track product.id; let i = $index;) {
+        @if (i < 3) {
+          <div class="search-product__results__item">
+            <img appLazyImage="{{ product.media[0].media_url | uploads }}" [alt]="product.nombre" class="search-product__results__item__media">
+            <div class="search-product__results__item__details">
+              <h2 class="search-product__results__item__title">
+                <a [routerLink]="['/productos', product.id]" (click)="showResults = false;" class="fw-bold">
+                  {{ product.nombre }}
+                </a>
+              </h2>
+              <small class="font-small">SKU: {{ product.sku }}</small>
+            </div>
+          </div>
+        }
+      }
+      <app-custom-button
+        style="width: fit-content;"
+        class="ms-auto"
+        [text]="'Ver todos los resultados'"
+        [icon]="'arrow-forward'"
+        [iconPosition]="'right'"
+        [fill]="'clear'"
+        [color]="'dark'"
+        (onClick)="showAllResults()"
+      ></app-custom-button>
+      @if (relatedCategories.length) {
+        <div class="search-product__results__categories">
+          <small class="text-dark-50">Categorías</small>
+          <ul>
+            @for (category of relatedCategories; track category.id) {
+              <li>
+                <a [routerLink]="[category.url]" (click)="showResults = false;" class="fw-bold font-small text-decoration-none">
+                  {{ category.nombre }}
+                </a>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    } @else {
+      <small class="text-dark-50">No se encontraron coincidencias</small>
+    }
+  </div>
+</form>

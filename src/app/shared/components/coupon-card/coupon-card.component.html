@@ -1,0 +1,55 @@
+<div class="accordion-item coupon-card">
+  <div class="accordion-header coupon-card__header" [id]="'coupon-'+coupon.id">
+    <div class="accordion-button text-dark d-flex" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#coupon-details-'+coupon.id" aria-expanded="true" [attr.aria-controls]="'coupon-details-'+coupon.id">
+      <div class="d-flex flex-grow-1 align-items-center">
+        <div class="coupon-card__icon">
+          <ion-icon name="ticket"></ion-icon>
+        </div>
+        <div class="d-flex flex-column">
+          <h2 class="font-normal fw-bold m-0">{{ coupon.nombre }}</h2>
+          <small class="text-dark-50">
+            Válido hasta el {{ coupon.fecha_expiracion }}
+          </small>
+        </div>
+      </div>
+      <div class="d-flex flex-column">
+        <h2 class="font-large fw-bold m-0 text-primary text-end">
+          @if (coupon.tipo_descuento == '$') {
+            {{ coupon.cantidad_descuento | currency:"MXN":"symbol" }}
+          } @else {
+            {{ coupon.cantidad_descuento }}{{ coupon.tipo_descuento }}
+          }
+        </h2>
+        <small class="text-primary text-end">de descuento</small>
+      </div>
+    </div>
+  </div>
+  <div
+    [id]="'coupon-details-'+coupon.id"
+    class="accordion-collapse collapse "
+    [attr.aria-labelledby]="'question-'+coupon.id"
+    data-bs-parent="#accordionExample"
+  >
+    <div class="accordion-body coupon-card__content">
+      <p class="font-small m-0">{{ coupon.descripcion }}</p>
+      <small>
+        Disponible en las sucursales:
+        <!-- @for (branch of coupon.sucursales; track branch.id; let isLast = $last) {
+          {{ branch.nombre | lowercase }}{{ (isLast) ? '' : ', ' }}
+        } -->
+      </small>
+      <ul>
+        @for (branch of coupon.sucursales; track branch.id) {
+          <li class="font-small">{{ branch.nombre }}</li>
+        }
+      </ul>
+      <p class="font-small">
+        Aplicable en los productos: 
+        @for (product of coupon.producto_ids; track product.id; let isLast = $last) {
+          {{ product.nombre | lowercase }}{{ (isLast) ? '' : ', ' }}
+        }
+      </p>
+      <small>{{ coupon.terminos_condiciones }}</small>
+    </div>
+  </div>
+</div>

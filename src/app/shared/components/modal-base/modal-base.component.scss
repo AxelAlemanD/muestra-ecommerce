@@ -1,0 +1,35 @@
+@import "../../../../theme/app.variables.scss";
+
+.modal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-medium);
+  width: 100%;
+  padding: var(--spacing-medium);
+  pointer-events: auto;
+  background-color: var(--background-color);
+  background-clip: padding-box;
+  border-radius: var(--border-radius);
+
+  &__header {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+
+    ::ng-deep app-custom-button .btn .btn__icon {
+      font-size: var(--font-size-normal);
+    }
+
+    .only-close-btn  {
+      position: absolute;
+      right: 0;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    gap: var(--spacing-normal);
+    justify-content: flex-end;
+  }
+}

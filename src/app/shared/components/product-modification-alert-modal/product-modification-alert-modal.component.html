@@ -1,0 +1,23 @@
+<app-modal-base
+  [buttons]="buttons"
+>
+  <div class="product-modification-alert-modal">
+    <p [innerHTML]="message"></p>
+    <app-product-card
+      class="product-modification-alert-modal__item"
+      [productId]="product.id"
+      (onAddToCartClick)="showProductAddAlert()"
+    ></app-product-card>
+    @if (relatedProducts && relatedProducts.length) {
+      <div class="d-flex flex-column">
+        <p class="m-0">O puedes agregar un producto similar:</p>
+        <app-product-carousel
+          [title]="''"
+          [products]="relatedProducts"
+          [autoplay]="true"
+          [size]="'small'"
+        ></app-product-carousel>
+      </div>
+    }
+  </div>
+</app-modal-base>

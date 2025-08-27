@@ -1,0 +1,50 @@
+<div class="otp-input">
+  <app-custom-control
+    #input1
+    class="otp-input__control"
+    [id]="'otp1'"
+    [name]="'otp1'"
+    [type]="'text'"
+    [placeholder]="'0'"
+    [maxLength]="1"
+    (onValueChange)="value['opt1'] = $event; emitValue(); nextInput(input1, input2);"
+    (keydown.backspace)="previousInput(input1, input1)"
+    (keydown.delete)="previousInput(input1, input1)"
+  ></app-custom-control>
+  <app-custom-control
+    #input2
+    class="otp-input__control"
+    [id]="'otp2'"
+    [name]="'otp2'"
+    [type]="'text'"
+    [placeholder]="'0'"
+    [maxLength]="1"
+    (onValueChange)="value['opt2'] = $event; emitValue(); nextInput(input2, input3);"
+    (keydown.backspace)="previousInput(input2, input1)"
+    (keydown.delete)="previousInput(input2, input1)"
+  ></app-custom-control>
+  <app-custom-control
+    #input3
+    class="otp-input__control"
+    [id]="'otp3'"
+    [name]="'otp3'"
+    [type]="'text'"
+    [placeholder]="'0'"
+    [maxLength]="1"
+    (onValueChange)="value['opt3'] = $event; emitValue(); nextInput(input3, input4);"
+    (keydown.backspace)="previousInput(input3, input2)"
+    (keydown.delete)="previousInput(input3, input2)"
+  ></app-custom-control>
+  <app-custom-control
+    #input4
+    class="otp-input__control"
+    [id]="'otp4'"
+    [name]="'otp4'"
+    [type]="'text'"
+    [placeholder]="'0'"
+    [maxLength]="1"
+    (onValueChange)="value['opt4'] = $event; emitValue(); nextInput(input4, input4);"
+    (keydown.backspace)="previousInput(input4, input3)"
+    (keydown.delete)="previousInput(input4, input3)"
+  ></app-custom-control>
+</div>

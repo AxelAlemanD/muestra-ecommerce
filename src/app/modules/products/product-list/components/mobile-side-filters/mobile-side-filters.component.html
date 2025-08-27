@@ -1,0 +1,168 @@
+<aside class="mobile-side-filters__body" [ngClass]="{'mobile-side-filters__body--open': isOpen}">
+  <div class="mobile-side-filters__header">
+    <strong class="font-normal fw-bold">Filtros</strong>
+    <app-custom-button
+      class="mobile-side-filters__close-btn"
+      [fill]="'clear'"
+      [color]="'dark'"
+      [icon]="'close'"
+      (onClick)="emitClose()"
+    ></app-custom-button>
+  </div>
+  <form class="mobile-side-filters__list" [formGroup]="form">
+    @if (showCategories) {
+      <div class="mobile-side-filters__item">
+        <span class="font-normal">Por categoría</span>
+        <div class="mobile-side-filters__categories-container">
+          @for (category of categories; track category.id) {
+            <div class="category__item">
+              <a
+                class="category__link font-small fw-bold"
+                [routerLink]="['/categorias', category.id]"
+              >
+                {{ category.nombre }}
+              </a>
+              @if (category.subcategorias && category.subcategorias.length) {
+                <ul class="category__subitems">
+                  @for (subcategory of category.subcategorias; track subcategory.id) {
+                    <li>
+                      <a
+                        class="category__sublink font-small"
+                        [routerLink]="['/categorias', category.id, 'subcategoria', subcategory.id]"
+                      >
+                        {{ subcategory.nombre }}
+                      </a>
+                    </li>
+                  }
+                </ul>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+    <div class="mobile-side-filters__item">
+      <span class="font-normal">Por marca</span>
+      <div class="mobile-side-filters__brands-container">
+        @for (brand of brands; track brand.id) {
+          <app-custom-radio
+            [label]="brand.nombre"
+            [value]="brand.id"
+            [id]="brand.id+''"
+            [isMultiple]="true"
+            [control]="form.controls['brands']"
+            (onClick)="changeSelectedBrands(brand.id+'')"
+          ></app-custom-radio>
+        }
+      </div>
+    </div>
+    <div class="mobile-side-filters__item">
+      <span class="font-normal">Con promoción</span>
+      <div class="mobile-side-filters__promotion-container">
+        <div class="mobile-side-filters__promotion-option">
+          <input
+            formControlName="promotion"
+            type="radio"
+            id="promotion-option-any"
+            value="any"
+            (click)="changePromotionStatus('any')"
+          >
+          <label class="custom-radio-item__label" for="promotion-option-any">Todos</label>
+        </div>
+        <div class="mobile-side-filters__promotion-option">
+          <input
+            formControlName="promotion"
+            type="radio"
+            id="promotion-option-true"
+            value="true"
+            (click)="changePromotionStatus('true')"
+          >
+          <label class="custom-radio-item__label" for="promotion-option-true">Si</label>
+        </div>
+        <div class="mobile-side-filters__promotion-option">
+          <input
+            formControlName="promotion"
+            type="radio"
+            id="promotion-option-false"
+            value="false"
+            (click)="changePromotionStatus('false')"
+          >
+          <label class="custom-radio-item__label" for="promotion-option-false">No</label>
+        </div>
+      </div>
+    </div>
+    @if (form.value['promotion'] === 'true') {
+      <div class="filters-widget__item">
+        <span class="font-normal">Tipo promoción</span>
+        <div class="filters-widget__promotion-container">
+          <div class="filters-widget__promotion-option">
+            <input
+              formControlName="promotionType"
+              type="radio"
+              id="promotion-type-any"
+              value="any"
+              (click)="changePromotionType('any')"
+            >
+            <label class="custom-radio-item__label" for="promotion-type-any">Todos</label>
+          </div>
+          <div class="filters-widget__promotion-option">
+            <input
+              formControlName="promotionType"
+              type="radio"
+              id="promotion-type-percentage"
+              value="%"
+              (click)="changePromotionType('%')"
+            >
+            <label class="custom-radio-item__label" for="promotion-type-percentage">%</label>
+          </div>
+          <div class="filters-widget__promotion-option">
+            <input
+              formControlName="promotionType"
+              type="radio"
+              id="promotion-type-amount"
+              value="$"
+              (click)="changePromotionType('$')"
+            >
+            <label class="custom-radio-item__label" for="promotion-type-amount">$</label>
+          </div>
+        </div>
+      </div>
+    }  
+    <div class="mobile-side-filters__item">
+      <span class="font-normal">Por precio</span>
+      <div class="filters-widget__range-container">
+        <ngx-slider
+          formControlName="range"
+          [options]="rangeOptions"
+          (userChange)="changeSelectedRange(); updateRangeControls($event);"
+        ></ngx-slider>
+        <div class="filters-widget__range-container__inputs">
+          <app-custom-control
+            formControlName="minPrice"
+            [id]="'min-price'"
+            [name]="'min-price'"
+            [type]="'number'"
+            (onValueChange)="changeSelectedRange()"
+          ></app-custom-control>
+          <span>a</span>
+          <app-custom-control
+            formControlName="maxPrice"
+            [id]="'max-price'"
+            [name]="'max-price'"
+            [type]="'number'"
+            (onValueChange)="changeSelectedRange()"
+          ></app-custom-control>
+        </div>
+      </div>
+    </div>
+    <app-custom-button
+      class="reset-filters"
+      [text]="'Reiniciar'"
+      [fill]="'solid'"
+      [color]="'medium'"
+      (onClick)="resetForm()"
+    ></app-custom-button>
+  </form>  
+</aside>
+
+<div class="mobile-side-filters__backdrop" [ngClass]="{'mobile-side-filters__backdrop--active': isOpen}" (click)="emitClose()"></div>

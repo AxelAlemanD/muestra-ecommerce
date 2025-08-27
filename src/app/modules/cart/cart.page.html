@@ -1,0 +1,132 @@
+@if (cart && productsQuantityInCart) {
+  <main class="my-cart">
+    <section class="my-cart__container">
+      <app-breadcrumb
+        class="w-100"
+        [items]="breadcrumb"
+      ></app-breadcrumb>
+    
+      <div class="my-cart__header">
+        <h2 class="font-large fw-bold m-0 text-dark">Mi carrito</h2>
+        <p class="m-0">Hay {{ productsQuantityInCart }} productos en tu carrito</p>
+      </div>
+    
+      <div class="my-cart__content">
+        <div class="my-cart__products">
+          <app-cart-table
+            [columns]="columns"
+            [cart]="cart"
+          ></app-cart-table>
+          <div class="my-cart__footer">
+            <app-custom-button
+              [text]="'Continuar comprando'"
+              [color]="'primary'"
+              [fill]="'solid'"
+              [icon]="'arrow-back'"
+              [iconPosition]="'left'"
+              (onClick)="redirectTo('/productos')"
+            ></app-custom-button>
+            <app-custom-button
+              [text]="'Vaciar carrito'"
+              [color]="'medium'"
+              [fill]="'solid'"
+              [icon]="'trash-outline'"
+              [iconPosition]="'left'"
+              (onClick)="clearCart()"
+            ></app-custom-button>
+          </div>
+        </div>
+        <div class="card my-cart__summary">
+          <div class="card__header">
+            <strong>Resumen de carrito</strong>
+          </div>
+          <div class="card__body">
+            <table>
+              <tr>
+                <td>
+                  <small>Productos</small>
+                </td>
+                <td class="text-end">
+                  <small> {{ cart!.subtotal | currency:"MXN":"symbol" }} </small>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <small>Descuento</small>
+                </td>
+                <td class="text-end">
+                  <small> - {{ cart!.descuento | currency:"MXN":"symbol" }} </small>
+                </td>
+              </tr>
+              @if (isAuth) {
+                <!-- <tr>
+                  <td>
+                    <small>Envio</small>
+                  </td>
+                  <td class="text-end">
+                    <ion-icon name="alert-circle" class="text-secondary" title="El costo de envío se calcula al seleccionar una dirección"></ion-icon>
+                  </td>
+                </tr> -->
+                <tr>
+                  <td colspan="2" class="d-flex align-items-center gap-2">
+                    <ion-icon name="alert-circle" class="text-secondary"></ion-icon>
+                    <small class="text-secondary">El costo de envío se calcula al seleccionar una dirección</small>
+                  </td>
+                </tr>
+                <!-- <tr>
+                  <td>
+                    <small>Envio</small>
+                  </td>
+                  <td class="text-end">
+                    @if (cart!.costo_envio) {
+                      <small> + {{ cart!.costo_envio | currency:"MXN":"symbol" }} </small>
+                    } @else {
+                      <small class="text-success"> GRATIS </small>
+                    }
+                  </td>
+                </tr> -->
+              } @else {
+                <tr>
+                  <td colspan="2">
+                    <small><a class="text-primary" [routerLink]="'/auth/login'" [queryParams]="{ redirectURL: '/mi-carrito' }">Inicia sesión</a> para calcular costo de envio</small>
+                  </td>
+                </tr> 
+              }
+              <!-- <tr>
+                <td colspan="2">
+                  <a class="font-small text-primary text-decoration-none">Ingresar código de cupón</a>
+                </td>
+              </tr> -->
+              <tr>
+                <td>
+                  <small class="fw-bold">Total</small>
+                </td>
+                <td class="text-end">
+                  <small class="text-primary fw-bold"> {{ cart!.total | currency:"MXN":"symbol" }} </small>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="card__footer">
+            <app-custom-button
+              [text]="'Continuar compra'"
+              [color]="'primary'"
+              [fill]="'solid'"
+              (onClick)="redirectTo('/checkout')"
+            ></app-custom-button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+} @else if (!cart || !productsQuantityInCart) {
+  <main class="my-cart--no-items">
+    <h3 class="font-large">Parece que no tienes ningún producto en tu carrito</h3>
+    <app-custom-button
+      [text]="'Explorar catálogo'"
+      [color]="'primary'"
+      [fill]="'solid'"
+      (onClick)="redirectTo('/productos')"
+    ></app-custom-button>
+  </main>
+}

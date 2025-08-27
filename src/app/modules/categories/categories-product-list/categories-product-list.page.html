@@ -1,0 +1,58 @@
+@if (filters && category) {
+  <main class="categories-product-list">
+    <section class="categories-product-list__separator">
+      <div class="d-flex flex-column">
+        <h2 class="font-large fw-bold m-0 text-dark">{{ category.nombre }}</h2>
+        <app-breadcrumb
+          [items]="breadcrumb"
+        ></app-breadcrumb>
+      </div>
+      <app-active-filters></app-active-filters>
+    </section>
+    @if (category.subcategorias && category.subcategorias.length && showSubcategories) {
+      <section class="categories-product-list__subcategories">
+        <ngx-slick-carousel class="carousel" 
+          #slickModal="slick-carousel" 
+          [config]="slideConfig"
+        >
+          @for (category of category.subcategorias; track category.id) {
+            <div ngxSlickItem class="slide" [id]="category.id +''" [ngClass]="{'force-grid': category.subcategorias && category.subcategorias.length < 8}">
+              <app-category-card [category]="category" (onClick)="redirectToSubcategory($event)"></app-category-card>
+            </div>
+          }
+        </ngx-slick-carousel>
+      </section>
+    }
+    <app-filters-widget
+      class="categories-product-list__filters"
+      [filters]="filters.filters"
+      [brands]="brandsToShow"
+      [showCategories]="false"
+    ></app-filters-widget>
+    <app-mobile-side-filters
+      class="mobile-side-filters"
+      [isOpen]="showSideFilters"
+      [filters]="filters.filters"
+      [brands]="brandsToShow"
+      [showCategories]="false"
+      [ngClass]="{'mobile-side-filters--open': showSideFilters}"
+    ></app-mobile-side-filters>
+    <app-paginator
+      class="categories-product-list__content"
+      [pages]="filters.pages"
+      [limit]="filters.limit"
+      [currentPage]="filters.page"
+      [items]="filters.items"
+      [total]="filters.total"
+    >
+    @if (filters.items.length){
+      <app-product-grid [products]="filters.items"></app-product-grid>
+    } @else {
+      <div class="categories-product-list__content--no-content">
+        <img class="categories-product-list__content--no-content__image" src="assets/images/sad-dog.svg" alt="Perrito triste">
+        <strong class="text-dark-50">Lo sentimos, no encontramos ninguna coincidencia</strong>
+      </div>
+    }
+    </app-paginator>
+  </main>
+}

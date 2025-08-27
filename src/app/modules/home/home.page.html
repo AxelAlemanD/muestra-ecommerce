@@ -1,0 +1,46 @@
+<main>
+  @if (sliderItems && sliderItems.length) {
+    <app-slider [items]="sliderItems"></app-slider>
+  }
+  @if (promotions && promotions.length) {
+    <app-promotions-block [items]="promotions"></app-promotions-block>
+  }
+  @if (categories && categories.length) {
+    <app-subcategory-group
+      [categories]="categories"
+      [title]="'Categorías populares'"
+      [autoplay]="false"
+    ></app-subcategory-group>
+  }
+  @if (brands && brands.length) {
+    <app-brand-carousel
+      [brands]="brands"
+      [title]="'Marcas'"
+      [subtitle]="'¡Calidad granatizada con las mejores marcas!'"
+    ></app-brand-carousel>
+  }
+  @if (popularProducts && popularProducts.length) {
+    <app-product-group
+      [title]="'Productos populares'"
+      [style]="'grid'"
+      [groups]="popularProducts"
+      [autoplay]="true"
+    ></app-product-group>
+  }
+  @if (bestSellingProductsOfTheDay && bestSellingProductsOfTheDay.length) {
+    <app-product-group
+      [title]="'Los más vendidos del día'"
+      [style]="'carousel'"
+      [groups]="bestSellingProductsOfTheDay"
+      [autoplay]="true"
+    ></app-product-group>
+  }
+  <app-testimonials-block
+    [title]="'Lo que nuestros clientes opinan'"
+    [items]="testimonials"
+  ></app-testimonials-block>
+  <app-faq-block
+    [title]="'Preguntas frecuentes'"
+    [items]="questions"
+  ></app-faq-block>
+</main>

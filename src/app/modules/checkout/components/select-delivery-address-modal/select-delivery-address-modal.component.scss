@@ -1,0 +1,13 @@
+.select-delivery-address {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-normal);
+
+  &__options {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-normal);
+  }
+}

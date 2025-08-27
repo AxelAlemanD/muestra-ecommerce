@@ -1,0 +1,13 @@
+<div class="timeline">
+    @for (item of items; track item.id; let isLast = $last) {
+        <div class="timeline__item" [title]="item.title" [ngClass]="{'timeline__item--active': item.id <= currentItem.id}">
+            <ion-icon [name]="(item.icon) ? item.icon : 'checkmark-outline'" class="timeline__item__icon"></ion-icon>
+        </div>
+        @if (!isLast) {
+            <div
+                class="timeline__separator"
+                [ngClass]="{'timeline__separator--active': item.id < currentItem.id}"
+            ></div>
+        }
+    }
+</div>

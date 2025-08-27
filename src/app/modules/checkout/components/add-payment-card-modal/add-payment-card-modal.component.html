@@ -1,0 +1,41 @@
+<app-modal-base
+  [title]="'Información de pago'"
+  [buttons]="[]"
+>
+  <div class="add-payment-card">
+    @if (elementsOptions.clientSecret) {
+      <form class="add-payment-card__form" [formGroup]="form" [ngClass]="{'d-none': loading}">
+        <ngx-stripe-payment
+          [elementsOptions]="elementsOptions"
+          (ready)="this.loading = false"
+        ></ngx-stripe-payment>
+      </form>
+    }
+    @if (loading) {
+      <div class="add-payment-card__loader">
+        <div class="dots__container">
+          <div class="dots"></div>
+          <div class="dots"></div>
+          <div class="dots"></div>
+        </div>
+      </div>
+    }
+    <div class="add-payment-card__actions">
+      <app-custom-button
+        [text]="'Cancelar'"
+        [color]="'dark'"
+        [fill]="'clear'"
+        [isDisabled]="paying"
+        (onClick)="closeModal()"
+      ></app-custom-button>
+      <app-custom-button
+        [text]="'Realizar pago'"
+        [color]="'primary'"
+        [fill]="'solid'"
+        [isLoading]="paying"
+        [isDisabled]="!form.valid"
+        (onClick)="pay()"
+      ></app-custom-button>
+    </div>
+  </div>
+</app-modal-base>

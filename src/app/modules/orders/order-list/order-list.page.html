@@ -1,0 +1,138 @@
+<main class="order-list">
+  <section class="order-list__container">
+    <app-breadcrumb
+      class="w-100"
+      [items]="breadcrumb"
+    ></app-breadcrumb>
+    <div class="order-list__header">
+      <h2 class="font-large fw-bold m-0 text-dark">Mis pedidos</h2>
+    </div>
+    <div class="order-list__filters">
+      <ul class="order-list__filters__statuses">
+        @for (status of statuses; track status.id) {
+          <li
+            button
+            class="order-list__filters__statuses__item"
+            [ngClass]="{'order-list__filters__statuses__item--active': activeStatus.id === status.id}"
+          >
+            <app-custom-button
+              [text]="status.label"
+              [fill]="'clear'"
+              [color]="(activeStatus.id === status.id) ? 'primary' : 'dark'"
+              (onClick)="changeActiveStatus(status)"
+            ></app-custom-button>
+          </li>
+        }
+      </ul>
+      <small>Se estan mostrando <b>{{ orders.length }}</b> pedidos</small>
+    </div>
+    @for (order of orders; track order.id) {
+      <div class="order-list__items">
+        <div class="order-list__item">
+          <div class="order-list__item__details">
+            <h4 class="font-normal fw-bold m-0">#{{ order.folio }}</h4>
+            <p class="m-0 font-small d-flex flex-column">
+              <small>Estado</small>
+              <small
+                class="order-list__item__status"
+                [ngClass]="{
+                  'order-list__item__status-secondary': order.estado >= OrderStatusEnum.PENDING && order.estado <= OrderStatusEnum.RESCHEDULED,
+                  'order-list__item__status-success': order.estado == OrderStatusEnum.DELIVERED,
+                  'order-list__item__status-danger': order.estado > OrderStatusEnum.DELIVERED,
+                }"
+              >
+                {{ order.estado | orderStatus }}
+                @if (order.estado === OrderStatusEnum.PENDING) {
+                  <ion-icon class="font-normal" name="timer"></ion-icon>
+                } @else if (order.estado === OrderStatusEnum.IN_PROCESS) {
+                  <ion-icon class="font-normal" name="hammer"></ion-icon>
+                } @else if (order.estado === OrderStatusEnum.READY) {
+                  <ion-icon class="font-normal" name="send"></ion-icon>
+                } @else if (order.estado === OrderStatusEnum.DELIVERED) {
+                  <ion-icon class="font-normal" name="checkmark-done-circle"></ion-icon>
+                } @else if (order.estado === OrderStatusEnum.CANCELLED) {
+                  <ion-icon class="font-normal" name="close-circle"></ion-icon>
+                } @else {
+                  <ion-icon class="font-normal" name="send"></ion-icon>
+                }
+              </small>
+              <!-- <strong>{{ order.estado | orderStatus }}</strong> -->
+            </p>
+            <p class="m-0 font-small d-flex flex-column">
+              <small>Fecha</small>
+              <strong>{{ order.fecha_elaboracion }} {{ order.hora_elaboracion }}</strong>
+            </p>
+            <p class="m-0 font-small d-flex flex-column">
+              <small>Total</small>
+              <strong class="text-primary">{{ order.total | currency:"MXN":"symbol" }}</strong>
+            </p>
+          </div>
+          <div class="order-list__item__products">
+            @for (item of order.productos; track item.producto.id; let i = $index) {
+              @if (i < 2) {
+                <div class="order-list__item__products__item">
+                  <img appLazyImage="{{ item.producto.media[0].media_url | uploads }}" [alt]="item.producto.nombre" class="order-list__item__products__item__media">
+                  <div class="order-list__item__products__item__details">
+                    <h2 class="order-list__item__products__item__title">
+                      x{{item.cantidad}} 
+                      <a [routerLink]="['/productos', item.producto.id]" [queryParams]="{ variante: (item.variante_id) ? item.variante_id : null }" class="fw-bold">
+                        {{ item.producto.nombre }}
+                      </a>
+                    </h2>
+                    @if (item.producto.sku) {
+                      <small class="font-small">SKU: {{ item.producto.sku }}</small>
+                    }
+                  </div>
+                </div>
+              }
+            }
+            @for (cartPromotion of order.promociones; track cartPromotion.promocion.id; let i = $index) {
+              @if (i < 2) {
+                <div class="order-list__item__products__item">
+                  <img appLazyImage="{{ cartPromotion.promocion.imagen_promocion! | uploads }}" [alt]="cartPromotion.promocion.titulo" class="order-list__item__products__item__media">
+                  <div class="order-list__item__products__item__details">
+                    <h2 class="order-list__item__products__item__title">
+                      x{{cartPromotion.cantidad}} 
+                      <a [routerLink]="['/productos', cartPromotion.promocion.id]" class="fw-bold">
+                        {{ cartPromotion.promocion.titulo }}
+                      </a>
+                    </h2>
+                  </div>
+                </div>
+              }
+            }
+            @if (order.productos.length > 2 || (order.promociones && order.promociones.length > 2)) {
+              <a [routerLink]="['/mis-pedidos', order.id]" class="font-small text-dark text-decoration-none d-flex gap-2 align-items-center">
+                Ver todos los productos
+                <ion-icon name="arrow-forward-outline"></ion-icon>
+              </a>
+            }
+          </div>
+          <div class="order-list__item__actions">
+            <app-custom-button
+              [text]="'Ver compra'"
+              [fill]="'solid'"
+              [color]="'primary'"
+              (onClick)="redirectTo('/mis-pedidos/'+order.id)"
+            ></app-custom-button>
+            <app-custom-button
+              [text]="'Volver a comprar'"
+              [fill]="'outline'"
+              [color]="'primary'"
+              (onClick)="purchaseNow(order)"
+            ></app-custom-button>
+          </div>
+        </div>
+      </div>
+    }
+    @if (!orders.length) {
+      <div class="order-list__items--no-items">
+        <p>No hay pedidos {{ activeStatus.id | orderStatus | lowercase }}
+          @if (activeStatus.id != 0) {
+            s
+          }
+        </p>
+      </div>
+    }
+  </section>
+</main>

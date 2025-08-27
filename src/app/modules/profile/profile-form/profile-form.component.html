@@ -1,0 +1,63 @@
+<main class="profile-form">
+  <section class="profile-form__container">
+    <div class="profile-form__header">
+      <h2 class="font-large fw-bold m-0 text-dark">Mi perfil</h2>
+    </div>
+    <form [formGroup]="form" class="row align-items-end" style="row-gap: 0.5rem;">
+      <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+        <app-custom-control
+          formControlName="nombre"
+          [id]="'nombre'"
+          [name]="'nombre'"
+          [label]="'Nombre'"
+          [type]="'text'"
+          [placeholder]="'Ingresa tu nombre'"
+          [control]="form.controls['nombre']"
+        ></app-custom-control>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+        <app-custom-control
+          formControlName="apellidos"
+          [id]="'apellidos'"
+          [name]="'apellidos'"
+          [label]="'Apellidos'"
+          [type]="'text'"
+          [placeholder]="'Ingresa tus apellidos'"
+          [control]="form.controls['apellidos']"
+        ></app-custom-control>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+        <app-custom-control
+          formControlName="telefono"
+          [id]="'telefono'"
+          [name]="'telefono'"
+          [label]="'Teléfono'"
+          [type]="'tel'"
+          [maxLength]="10"
+          [placeholder]="'Ingresa tu teléfono'"
+          [control]="form.controls['telefono']"
+        ></app-custom-control>
+      </div>
+      <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+        <app-custom-control
+          formControlName="email"
+          [id]="'email'"
+          [name]="'email'"
+          [label]="'Correo electrónico'"
+          [type]="'email'"
+          [placeholder]="'casaluca@email.com'"
+          [control]="form.controls['email']"
+        ></app-custom-control>
+      </div>
+      <div class="col-12 d-flex justify-content-end">
+        <app-custom-button
+          [text]="'Guardar cambios'"
+          [color]="'primary'"
+          [fill]="'solid'"
+          [isDisabled]="!form.valid || !form.dirty"
+          (onClick)="updateProfile()"
+        ></app-custom-button>
+      </div>
+    </form>
+  </section>
+</main>

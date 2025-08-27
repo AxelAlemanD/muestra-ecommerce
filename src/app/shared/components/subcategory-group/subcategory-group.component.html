@@ -1,0 +1,61 @@
+<section class="subcategory-group">
+  <div class="subcategory-group__header">
+    <h2 class="font-large m-0">{{ title }}</h2>
+    <ul class="subcategory-group__header-categories">
+      @for (category of categories; track category.id) {
+        <li
+          button
+          class="subcategory-group__header-categories__item"
+          [ngClass]="{'subcategory-group__header-categories__item--active': activeCategory.id === category.id}"
+        >
+          <app-custom-button
+            [text]="category.nombre"
+            [fill]="'clear'"
+            [color]="(activeCategory.id === category.id) ? 'primary' : 'dark'"
+            (onClick)="changeActiveCategory(category)"
+          ></app-custom-button>
+        </li>
+      }
+    </ul>
+    <div class="subcategory-group__header-carousel__actions">
+      <app-custom-button
+        [icon]="'arrow-back'"
+        [fill]="'solid'"
+        [color]="'medium'"
+        (onClick)="prevSlide()"
+      ></app-custom-button>
+      <app-custom-button
+        [icon]="'arrow-forward'"
+        [fill]="'solid'"
+        [color]="'medium'"
+        (onClick)="nextSlide()"
+      ></app-custom-button>
+    </div>
+  </div>
+  @if (slideConfig && showCarousel) {
+    <div class="subcategory-group__content">
+        <div class="subcategory-group__content-carousel">
+          <ngx-slick-carousel
+            class="carousel"
+            [ngClass]="{'force-grid':activeCategory.subcategorias && activeCategory.subcategorias.length < 8}"
+            #slickModal="slick-carousel" 
+            [config]="slideConfig"
+          >
+            @for (category of activeCategory.subcategorias; track category.id) {
+              <div ngxSlickItem [id]="category.id +''">
+                <app-category-card [category]="category" (onClick)="redirectToSubcategory($event)"></app-category-card>
+              </div>
+            }
+          </ngx-slick-carousel>
+        </div>
+    </div>
+  } @else if (!showCarousel) {
+    <div class="subcategory-group__no-content">
+      <div class="dots__container">
+        <div class="dots"></div>
+        <div class="dots"></div>
+        <div class="dots"></div>
+      </div>
+    </div>
+  }
+</section>

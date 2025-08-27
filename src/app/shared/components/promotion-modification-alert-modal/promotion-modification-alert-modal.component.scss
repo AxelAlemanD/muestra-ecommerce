@@ -1,0 +1,36 @@
+.promotion-modification-alert-modal {
+  
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-normal);
+
+  &__item ::ng-deep {
+    .promotion-card {
+      max-width: 100%;
+      flex-direction: row;
+
+      &__header {
+        width: fit-content;
+
+        &-image {
+          width: 5rem;
+          height: 5rem;
+        }
+
+        &-actions {
+          display: none;
+        }
+      }
+
+      &:hover {
+        transition: unset;
+        box-shadow: unset;
+        border: 1px solid var(--color-medium);
+      }
+
+      app-custom-quantity-control {
+        display: none;
+      }
+    }
+  }
+}

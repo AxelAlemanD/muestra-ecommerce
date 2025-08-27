@@ -1,0 +1,80 @@
+<form class="cart-preview" [formGroup]="form">
+  <div class="cart-preview__items" formArrayName="cartItems">
+    @if (cart) {
+      @for (cartItem of cartItems.controls; track cartItem.value['producto_id']; let i = $index) {
+        @if (i < 2) {
+          <div class="cart-preview__item" [formGroupName]="i">
+            <img appLazyImage="{{ cartItem.value['producto_media'] | uploads }}" [alt]="cartItem.value['producto_nombre']" class="item__media">
+            <div class="item__details">
+              <h2 class="product__title">
+                <a [routerLink]="['/productos', cartItem.value['producto_id']]" [queryParams]="{ variante: cartItem.value['variante_id'] }">
+                  {{ cartItem.value['producto_nombre'] }}
+                </a>
+              </h2>
+              <small class="text-primary">{{ cartItem.value['monto'] | currency:"MXN":"symbol" }}</small>
+              <app-custom-quantity-control
+                formControlName="cantidad"
+                [id]="'cart-item-preview' + cartItem.value['id']"
+                [name]="'cart-item-preview' + cartItem.value['id']"
+                [control]="cartItem.get('cantidad')!"
+                [max]="cartItem.value['stock']"
+                (onValueChange)="updateCartItem(i, $event)"
+              ></app-custom-quantity-control>
+            </div>
+          </div>
+        }
+      }
+      @for (cartPromotion of cart.promociones; track cartPromotion.promocion.id; let i = $index) {
+        @if (i < 2) {
+          <div class="cart-preview__item">
+            <img appLazyImage="{{ cartPromotion.promocion.imagen_promocion! | uploads }}" [alt]="cartPromotion.promocion.titulo" class="item__media">
+            <div class="item__details">
+              <h2 class="product__title">
+                <a [routerLink]="['/promociones', cartPromotion.promocion.id]">
+                  {{ cartPromotion.promocion.titulo }}
+                </a>
+              </h2>
+              <small class="text-primary">{{ cartPromotion.promocion.total_con_descuento | currency:"MXN":"symbol" }}</small>
+            </div>
+          </div>
+        }
+      }
+      <!-- 
+      @if (cart && cartItems.length > 2) {
+        <small class="text-dark-50 w-100 text-end">
+          +{{cartItems.length - 2}} productos
+        </small>
+      }
+      -->
+    }
+    @if (cart && (cartItems.length || (cart.promociones && cart.promociones.length))) {
+      <div class="cart-preview__total">
+        <small class="text-dark-50">Total</small>
+        <small class="text-primary fw-bold"> {{ cart.total | currency:"MXN":"symbol" }} </small>
+      </div>
+      <div class="cart-preview__actions">
+        <app-custom-button
+          [text]="'Ver carrito'"
+          [color]="'primary'"
+          [fill]="'outline'"
+          (onClick)="redirectTo('/mi-carrito')"
+        ></app-custom-button>
+        <app-custom-button
+          [text]="'Ir a checkout'"
+          [color]="'primary'"
+          [fill]="'solid'"
+          (onClick)="redirectTo('/checkout')"
+        ></app-custom-button>
+      </div>
+    } @else {
+      <p class="text-center font-small m-0">No hay productos en tu carrito</p>
+      <app-custom-button
+        [text]="'Explorar catálogo'"
+        [color]="'primary'"
+        [fill]="'solid'"
+        (onClick)="redirectTo('/productos')"
+      ></app-custom-button>
+    }
+  </div>
+  
+</form>

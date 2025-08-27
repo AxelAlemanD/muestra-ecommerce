@@ -1,0 +1,160 @@
+<section class="sign-up">
+  @if (currentStep.id != 4) {
+    <img class="sign-up__logo" src="assets/images/logo.png" alt="Logotipo Casa Luca">
+
+    <app-timeline
+      [items]="timeline"
+      [currentItem]="currentStep"
+    ></app-timeline>
+  }
+
+  <h1 class="sign-up__title">{{ currentStep.title }}</h1>
+
+  @if (currentStep.id != 4) {
+    <form class="sign-up__form" [formGroup]="form">
+      @if (currentStep.id == 1) {
+        <div formGroupName="generalData">
+          <app-custom-control
+            formControlName="firstName"
+            [id]="'firstName'"
+            [name]="'firstName'"
+            [label]="'Nombre'"
+            [type]="'text'"
+            [placeholder]="'Ingresa tu nombre'"
+            [control]="form.get('generalData.firstName')!"
+          ></app-custom-control>
+          <app-custom-control
+            formControlName="lastName"
+            [id]="'lastName'"
+            [name]="'lastName'"
+            [label]="'Apellidos'"
+            [type]="'text'"
+            [placeholder]="'Ingresa tus apellidos'"
+            [control]="form.get('generalData.lastName')!"
+          ></app-custom-control>
+          <app-custom-control
+            formControlName="phone"
+            [id]="'phone'"
+            [name]="'phone'"
+            [label]="'Teléfono'"
+            [type]="'tel'"
+            [maxLength]="10"
+            [placeholder]="'Ingresa tu teléfono'"
+            [control]="form.get('generalData.phone')!"
+          ></app-custom-control>
+          <app-custom-button
+            [text]="'Siguiente'"
+            [color]="'primary'"
+            [fill]="'solid'"
+            [isDisabled]="!form.controls['generalData'].valid"
+            (onClick)="nextStep()"
+          ></app-custom-button>
+          <span class="font-small text-center">
+            ¿Ya tienes cuenta? <a class="text-primary text-decoration-none" [routerLink]="['/auth/login']">Inicia sesión</a>
+          </span>
+        </div>
+      } @else if (currentStep.id == 2) {
+        @if (form.get('credentials')?.hasError('mismatch')) {
+          <small class="text-danger">Asegúrese de que la contraseña sea la misma</small>
+        }
+        <div formGroupName="credentials">
+          <app-custom-control
+            formControlName="email"
+            [id]="'email'"
+            [name]="'email'"
+            [label]="'Correo electrónico'"
+            [type]="'email'"
+            [placeholder]="'casaluca@email.com'"
+            [control]="form.get('credentials.email')!"
+          ></app-custom-control>
+          <app-custom-control
+            formControlName="password"
+            [id]="'password'"
+            [name]="'password'"
+            [label]="'Contraseña'"
+            [type]="(this.showPassword) ? 'text' : 'password'"
+            [placeholder]="'********'"
+            [control]="form.get('credentials.password')!"
+            [button]="{
+              color: 'medium',
+              icon: (this.showPassword) ? 'eye-off' : 'eye'
+            }"
+            (onClickButton)="toggleShowPassword()"
+          ></app-custom-control>
+          <app-custom-control
+            formControlName="confirmPassword"
+            [id]="'confirmPassword'"
+            [name]="'confirmPassword'"
+            [label]="'Confirmar contraseña'"
+            [type]="(this.showConfirmPassword) ? 'text' : 'password'"
+            [placeholder]="'********'"
+            [control]="form.get('credentials.confirmPassword')!"
+            [button]="{
+              color: 'medium',
+              icon: (this.showConfirmPassword) ? 'eye-off' : 'eye'
+            }"
+            (onClickButton)="toggleShowConfirmPassword()"
+          ></app-custom-control>
+          <div>
+            <p class="font-small text-dark-50">
+              Para asegurar la integridad de tu información, tu contraseña debe estar compuesta por al menos 8 caracteres, en los cuales debes incluir:
+            </p>
+            <ul class="font-small">
+              <li class="text-dark-50">una letra mayúscula</li>
+              <li class="text-dark-50">una letra minúscula</li>
+              <li class="text-dark-50">un número</li>
+              <li class="text-dark-50">un carácter especial (como &#64;, #, $)</li>
+            </ul>
+          </div>
+          <app-custom-button
+            [text]="'Siguiente'"
+            [color]="'primary'"
+            [fill]="'solid'"
+            [isDisabled]="!form.controls['credentials'].valid"
+            (onClick)="nextStep()"
+          ></app-custom-button>
+          <app-custom-button
+            [text]="'Anterior'"
+            [color]="'medium'"
+            [fill]="'solid'"
+            (onClick)="previousStep()"
+          ></app-custom-button>
+        </div>
+      } @else if (currentStep.id == 3) {
+        <p class="font-small">
+          Al marcar el siguiente checkbox, confirmas que has leído, comprendido y aceptas los términos y condiciones establecidos por nuestro ecommerce. Esto incluye nuestras políticas de privacidad, uso de datos, y cualquier otra normativa que regula el uso de nuestros servicios y la compra de productos a través de nuestra plataforma.
+        </p>
+        <app-custom-checkbox
+          formControlName="agreements"
+          [label]="'Acepto términos y condiciones'"
+          [value]="true"
+          [id]="'agreements'"
+          [control]="form.controls['agreements']"
+        ></app-custom-checkbox>
+        <app-custom-button
+          [text]="'Crear cuenta'"
+          [color]="'primary'"
+          [fill]="'solid'"
+          [isDisabled]="!form.controls['agreements'].valid"
+          (onClick)="createAccount()"
+        ></app-custom-button>
+        <app-custom-button
+          [text]="'Anterior'"
+          [color]="'medium'"
+          [fill]="'solid'"
+          (onClick)="previousStep()"
+        ></app-custom-button>
+      }
+    </form>
+  } @else if(currentStep.id == 4){
+    <div class="sign-up__success">
+      <ion-icon name="checkmark-circle" class="font-title text-success"></ion-icon>
+      <p class="font-small mb-0">
+        En breve recibirás un correo de confirmación a la dirección <b>{{ form.get('credentials.email')!.value }}</b>
+      </p>
+      <p class="font-small mb-0">
+        Serás redirigido en {{ seconds }} segundos
+      </p>
+    </div>
+  }
+</section>

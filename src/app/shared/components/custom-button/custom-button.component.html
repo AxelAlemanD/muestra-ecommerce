@@ -1,0 +1,19 @@
+<button
+  class="btn btn-{{color}} btn-{{fill}}"
+  [ngClass]="{
+    'justify-content-center': !icon,
+    'btn--loading': isLoading
+  }"
+  [disabled]="isDisabled || isLoading"
+  (click)="emitClick()"
+>
+  @if (text) {
+    {{ text }}
+  }
+  @if (icon) {
+    <ion-icon [name]="icon" [ngClass]="{'invisible': isLoading}" class="btn__icon icon-{{iconPosition}}"></ion-icon>
+  }
+  @if (isLoading) {
+    <span class="loader"></span>
+  }
+</button>

@@ -1,0 +1,7 @@
+<section class="promotions-block">
+  @for (item of items; track item.id) {
+    <app-promotion-card
+      [promotionId]="item.id"
+    ></app-promotion-card>
+  }
+</section>

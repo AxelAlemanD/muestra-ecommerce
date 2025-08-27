@@ -1,0 +1,130 @@
+<main class="pet-form">
+  <section class="pet-form__container">
+    <app-breadcrumb
+      class="w-100"
+      [items]="breadcrumb"
+    ></app-breadcrumb>
+    <div class="pet-form__header">
+      <h2 class="font-large fw-bold m-0 text-dark">{{ (petId) ? 'Actualizar mascota' : 'Agregar mascota' }}</h2>
+    </div>
+    <form [formGroup]="form" class="row align-items-end m-0" style="row-gap: 0.5rem;">
+      <div class="col-12 d-flex gap-3">
+        <div class="pet-form__image" [ngClass]="{'pet-form__image--unset': !form.value['srcFoto']}" (click)="openFilePicker();">
+          @if (form.value['srcFoto']) {
+            <img alt="Foto de mascota" src="{{ (selectedImage) ? form.value['srcFoto'] : (form.value['srcFoto'] | uploads) }}">
+          } @else {
+            <ion-icon name="image"></ion-icon>
+          }
+        </div>
+        <div class="pet-form__image__input__container">
+          <app-custom-control
+            formControlName="nombreFoto"
+            class="pet-form__image__input"
+            [id]="'nombreFoto'"
+            [name]="'nombreFoto'"
+            [label]="'Foto'"
+            [type]="'text'"
+            [placeholder]="'Seleccionar archivo'"
+            [button]="(!petId)
+              ? {
+                color: 'primary',
+                text: 'Cargar foto'
+              }
+              : undefined
+            "
+            [isDisabled]="true"
+            [buttonAlwaysEnabled]="true"
+            [control]="form.controls['nombreFoto']"
+            (onClickButton)="openFilePicker();"
+          ></app-custom-control>
+          <small class="text-dark-50" *ngIf="!petId">Archivos soportados: .jpg, .jpeg, .png</small>
+          <input accept="image/png, image/jpg, image/jpeg" type="file" name="pet-photo-picker" id="pet-photo-picker" class="d-none" (change)="onImageChange($event)">
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+        <app-custom-control
+          formControlName="nombre"
+          [id]="'nombre'"
+          [name]="'nombre'"
+          [label]="'Nombre'"
+          [type]="'text'"
+          [placeholder]="'Firulais'"
+          [control]="form.controls['nombre']"
+        ></app-custom-control>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-6 col-6">
+        <app-custom-select
+          formControlName="genero"
+          [id]="'genero'"
+          [name]="'genero'"
+          [label]="'Género'"
+          [items]="genres"
+          [bindLabel]="'label'"
+          [bindValue]="'value'"
+          [control]="form.controls['genero']"
+        ></app-custom-select>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-6 col-6">
+        <app-custom-select
+          formControlName="especie"
+          [id]="'especie'"
+          [name]="'especie'"
+          [label]="'Especie'"
+          [items]="species"
+          [bindLabel]="'label'"
+          [bindValue]="'value'"
+          [isRequired]="true"
+          [control]="form.controls['especie']"
+        ></app-custom-select>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-6 col-6">
+        <app-custom-select
+          formControlName="tamaño"
+          [id]="'tamaño'"
+          [name]="'tamaño'"
+          [label]="'Tamaño'"
+          [items]="sizes"
+          [bindLabel]="'label'"
+          [bindValue]="'value'"
+          [control]="form.controls['tamaño']"
+        ></app-custom-select>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-6 col-6">
+        <app-custom-control
+          formControlName="fecha_nacimiento"
+          [id]="'fecha_nacimiento'"
+          [name]="'fecha_nacimiento'"
+          [label]="'Fecha de nacimiento'"
+          [type]="'date'"
+          [control]="form.controls['fecha_nacimiento']"
+        ></app-custom-control>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-6 col-6">
+        <app-custom-control
+          formControlName="edad"
+          [id]="'edad'"
+          [name]="'edad'"
+          [label]="'Edad'"
+          [type]="'number'"
+          [placeholder]="'0'"
+          [control]="form.controls['edad']"
+        ></app-custom-control>
+      </div>
+      <div class="col-12 pet-form__actions">
+        <app-custom-button
+          [text]="'Cancelar'"
+          [color]="'dark'"
+          [fill]="'clear'"
+          (onClick)="goBack()"
+        ></app-custom-button>
+        <app-custom-button
+          [text]="'Guardar mascota'"
+          [color]="'primary'"
+          [fill]="'solid'"
+          [isDisabled]="!form.valid || !form.dirty"
+          (onClick)="savePet()"
+        ></app-custom-button>
+      </div>
+    </form>
+  </section>
+</main>

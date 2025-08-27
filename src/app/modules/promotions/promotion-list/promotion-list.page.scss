@@ -1,0 +1,63 @@
+.promotion-list {
+  &__separator {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-normal);
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--spacing-large);
+    border-radius: var(--border-radius);
+    background-color: rgba(var(--color-primary-rgb), 0.2);
+  }
+
+  &__sliders {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    justify-content: center;
+    gap: var(--spacing-normal);
+
+    &__items {
+      flex: 3;
+      width: 65%;
+      height: 400px;
+    }
+
+    &__title {
+      flex: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      padding: var(--spacing-normal);
+      border-radius: var(--border-radius);
+      background-color: rgba(var(--color-primary-rgb), 0.5);
+      background-image: url('../../../../assets/images/pattern.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: right 0px bottom -150px;
+    }
+  }
+}
+
+
+.btn-whatsapp {
+  width: fit-content;
+  height: fit-content;
+  position: fixed;
+  bottom: 15px;
+  right: 8px;
+  z-index: 1000;
+  padding: 0;
+  opacity: 0.5;
+  transition: all 0.3s ease 0s;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .7));
+
+  &:hover {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  img {
+    width: 56px;
+  }
+}

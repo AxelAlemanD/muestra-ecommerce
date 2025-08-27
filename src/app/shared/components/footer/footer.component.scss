@@ -1,0 +1,124 @@
+.footer {
+
+  a {
+    display: flex;
+    text-decoration: none;
+  }
+
+  .footer__list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: var(--font-size-small);
+
+    li {
+      height: fit-content;
+    }
+
+    &-vertical {
+      flex-direction: column;
+      gap: var(--spacing-normal);
+      align-items: flex-start;
+    }
+
+    &-horizontal {
+      gap: var(--spacing-small);
+      align-items: center;
+    }
+
+  }
+
+  &__content {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: var(--spacing-large);
+    justify-content: space-between;
+    padding: var(--spacing-medium) var(--spacing-normal);
+    background-color: var(--color-medium);
+
+    .footer__column {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-normal);
+      width: calc(calc((100% / 4)) - var(--spacing-normal));
+
+      &.last {
+        gap: var(--spacing-large);
+      }
+
+      @media (max-width: 768px) {
+        width: calc(calc((100% / 2)) - var(--spacing-normal));
+      }
+
+      @media (max-width: 650px) {
+        width: 100%;
+      }
+    }
+
+    .footer__logo {
+      width: 5rem;
+      object-fit: contain;
+    }
+
+    .footer__contact {
+      display: flex;
+      justify-content: space-between;
+
+      &-item {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    .footer_social-media {
+      display: flex;
+      gap: var(--spacing-small);
+      align-items: center;
+    }
+
+    .footer__app-links {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-normal);
+
+      ul {
+        gap: var(--spacing-normal);
+      }
+
+      .store-logo {
+        width: 100%;
+        max-width: 9rem;
+        object-fit: contain;
+      }
+    }
+
+    .footer__payment-methods {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-normal);
+
+      ul {
+        gap: var(--spacing-small);
+
+        li {
+          width: fit-content;
+        }
+      }
+
+      .payment-method {
+        width: 2.5rem;
+        object-fit: contain;
+      }
+    }
+  }
+
+  &__copyright {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: var(--spacing-normal);
+    justify-content: space-between;
+    background-color: var(--color-light);
+    padding: var(--spacing-normal);
+  }
+}

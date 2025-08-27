@@ -1,0 +1,226 @@
+@if (order) {
+  <main class="order-details">
+    <section class="order-details__container">
+      <app-breadcrumb
+        class="w-100"
+        [items]="breadcrumb"
+      ></app-breadcrumb>
+      <div class="order-details__header">
+        <div class="d-flex flex-column">
+          <h2 class="font-large fw-bold m-0 text-dark d-flex gap-3">
+            #{{ order.folio }} 
+            <small
+              class="order-details__header__status"
+              [ngClass]="{
+                'order-details__header__status-secondary': order.estado >= OrderStatusEnum.PENDING && order.estado <= OrderStatusEnum.RESCHEDULED,
+                'order-details__header__status-success': order.estado == OrderStatusEnum.DELIVERED,
+                'order-details__header__status-danger': order.estado > OrderStatusEnum.DELIVERED,
+              }"
+            >
+              {{ order.estado | orderStatus }}
+              @if (order.estado === OrderStatusEnum.PENDING) {
+                <ion-icon class="font-normal" name="timer"></ion-icon>
+              } @else if (order.estado === OrderStatusEnum.IN_PROCESS) {
+                <ion-icon class="font-normal" name="hammer"></ion-icon>
+              } @else if (order.estado === OrderStatusEnum.READY) {
+                <ion-icon class="font-normal" name="send"></ion-icon>
+              } @else if (order.estado === OrderStatusEnum.DELIVERED) {
+                <ion-icon class="font-normal" name="checkmark-done-circle"></ion-icon>
+              } @else if (order.estado === OrderStatusEnum.CANCELLED) {
+                <ion-icon class="font-normal" name="close-circle"></ion-icon>
+              } @else {
+                <ion-icon class="font-normal" name="send"></ion-icon>
+              }
+            </small>
+          </h2>
+          <p class="m-0 font-small"><span class="text-dark-50">Fecha de compra</span> {{ order.fecha_elaboracion_web }} {{ order.hora_elaboracion }} </p>
+        </div>
+        @if (order.estado === OrderStatusEnum.PENDING) {
+          <app-custom-button
+            [text]="'Cancelar compra'"
+            [color]="'danger'"
+            [fill]="'clear'"
+            (onClick)="openCancelOrderModal()"
+          ></app-custom-button>
+        }
+      </div>
+  
+      <div class="order-details__content">
+        <div class="order-details__products">
+          @if (order.tipo_envio === DeliveryTypeEnum.DELIVERY) {
+            @if (order.repartidor || (pin && pin.length)) {
+              <div class="order-details__delivery-info">
+                @if (order.repartidor) {
+                  <div class="card order-details__delivery-info__delivery-man">
+                      <div class="card__body">
+                          <span>Repartidor asignado</span>
+                          <div class="d-flex gap-2">
+                            <img src="assets/images/avatar.png" alt="Avatar" class="order-details__delivery-info__delivery-man__avatar">
+                            <div class="d-flex flex-column m-0" style="flex: 1;">
+                              <strong>{{ order.repartidor.nombre }}</strong>
+                              <!-- <small>{{ selectedAddress.resumen }}</small> -->
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                              <app-custom-button
+                                [color]="'dark'"
+                                [icon]="'chatbox'"
+                                [fill]="'clear'"
+                                (onClick)="openWhatsApp('')"
+                              ></app-custom-button>
+                              <app-custom-button
+                                [color]="'dark'"
+                                [icon]="'call'"
+                                [fill]="'clear'"
+                                (onClick)="openPhoneDialer('')"
+                              ></app-custom-button>
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+                }
+                @if (pin && pin.length) {
+                  <div class="card order-details__delivery-info__pin">
+                      <div class="card__body">
+                          <span>Pin de confirmación</span>
+                          <div class="d-flex justify-content-between align-items-center">
+                              <div class="order-details__delivery-info__pin__container">
+                                @for (digit of pin; track $index) {
+                                  <strong class="order-details__delivery-info__pin__digit">{{ digit }}</strong>
+                                }
+                              </div>
+                              <ion-icon name="alert-circle" class="text-secondary font-large cursor-pointer" title="Proporciona el pin al repartidor en persona para confirmar la entrega de tu pedido"></ion-icon>
+                          </div>
+                      </div>
+                  </div>
+                }
+              </div>
+            }
+            <div class="order-details__map">
+              <app-delivery-map
+                [clientAddress]="{
+                  lat: order.direccion.latitud,
+                  lng: order.direccion.longitud
+                }"
+                [deliveryAddress]="deliveryAddress!"
+              ></app-delivery-map>
+            </div>
+          }
+          <app-cart-table
+            [columns]="columns"
+            [cart]="order"
+          ></app-cart-table>
+        </div>
+        <div class="order-details__details">
+          @if (order.estado !== OrderStatusEnum.CANCELLED) {
+            <app-timeline
+              [items]="timeline"
+              [currentItem]="currentStatus"
+            ></app-timeline>
+          }
+          <div class="card order-details__delivery-type">
+            <div class="card__body">
+              <p class="d-flex flex-column m-0">
+                <span>Tipo de entrega</span>
+                <strong>{{ order.tipo_envio! | deliveryType }}</strong>
+              </p>
+            </div>
+          </div>
+          @if (order.tipo_envio === DeliveryTypeEnum.DELIVERY) {
+            <div class="card order-details__delivery-address">
+              <div class="card__body">
+                <p class="d-flex flex-column m-0">
+                  <span>Dirección de entrega</span>
+                  @if (order.direccion && selectedAddress) {
+                    <strong>{{ selectedAddress.alias }}</strong>
+                    <small>{{ selectedAddress.resumen }}</small>
+                  }
+                </p>
+              </div>
+            </div>
+          }
+          <div class="card order-details__payment-method">
+            <div class="card__body">
+              <p class="d-flex flex-column m-0">
+                <span>Método de pago</span>
+                <strong >{{ order.forma_pago! | paymentMethod }}</strong>
+              </p>
+            </div>
+          </div>
+          <div class="card order-details__summary">
+            <div class="card__header">
+              <strong>Resumen de compra</strong>
+            </div>
+            <div class="card__body">
+              <table>
+                <tr>
+                  <td>
+                    <small>Subtotal</small>
+                  </td>
+                  <td class="text-end">
+                    <small> {{ order!.subtotal | currency:"MXN":"symbol" }} </small>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <small>Descuento</small>
+                  </td>
+                  <td class="text-end">
+                    <small> -{{ order!.descuento | currency:"MXN":"symbol" }} </small>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <small>Cupones</small>
+                  </td>
+                  <td class="text-end">
+                    <small> -{{ ((order!.cupon) ? order!.cupon.cantidad_descuento : 0) | currency:"MXN":"symbol" }} </small>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <small>Envio</small>
+                  </td>
+                  <td class="text-end">
+                    @if (order!.costo_envio) {
+                      <small> + {{ order!.costo_envio | currency:"MXN":"symbol" }} </small>
+                    } @else {
+                      <small class="text-success"> GRATIS </small>
+                    }
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <small class="fw-bold">Total</small>
+                  </td>
+                  <td class="text-end">
+                    <small class="text-primary fw-bold"> {{ order!.total | currency:"MXN":"symbol" }} </small>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="card__footer">
+              <!-- @if (order.estado > OrderStatusEnum.SENT && order.estado < OrderStatusEnum.DELIVERED) { -->
+                <app-custom-button
+                  [text]="'Realizar checklist de entrega'"
+                  [color]="'primary'"
+                  [fill]="'solid'"
+                  (onClick)="openDeliveryChecklistModal()"
+                ></app-custom-button>
+              <!-- } @else if (order.estado === OrderStatusEnum.DELIVERED) { -->
+                <span class="tag tag-success">
+                  {{ order.estado | orderStatus }}
+                  <ion-icon name="checkmark-circle" class="font-large"></ion-icon>
+                </span>
+              <!-- } @else if (order.estado === OrderStatusEnum.CANCELLED) { -->
+                <span class="tag tag-danger">
+                  {{ order.estado | orderStatus }}
+                  <ion-icon name="close-circle" class="font-large"></ion-icon>
+                </span>
+              <!-- } -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+}

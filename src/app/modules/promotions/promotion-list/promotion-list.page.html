@@ -1,0 +1,44 @@
+<main class="promotion-list">
+  <section class="promotion-list__separator">
+    <div class="d-flex flex-column">
+      <h2 class="font-large fw-bold m-0 text-dark">Promociones</h2>
+      <app-breadcrumb
+        [items]="breadcrumb"
+      ></app-breadcrumb>
+    </div>
+  </section>
+  @if (generalCoupons && generalCoupons.length) {
+    <app-coupon-carousel
+    [title]="'Cupones generales'"
+    [coupons]="generalCoupons"
+    ></app-coupon-carousel>
+  }
+  @if (customerCoupons && customerCoupons.length) {
+    <app-coupon-carousel
+    [title]="'Cupones personales'"
+    [coupons]="customerCoupons"
+    ></app-coupon-carousel>
+  }
+  @if (promotions && promotions.length) {
+    <app-promotions-block
+      [items]="promotions"
+    ></app-promotions-block>
+  }
+  @if (sliderItems && sliderItems.length) {
+    <div class="promotion-list__sliders">
+      <div class="promotion-list__sliders__items">
+        <app-slider [items]="sliderItems"></app-slider>
+      </div>
+      <div class="promotion-list__sliders__title">
+        <h3 class="font-large">¡Grandes descuentos!</h3>
+        <p class="font-normal">Disfruta de tus productos favoritos a precios rebajados</p>
+      </div>
+    </div>
+  }
+  @if (promotionProducts && promotionProducts.length) {
+    <app-product-grid
+      [title]="'Productos con descuentos'"
+      [products]="promotionProducts"
+    ></app-product-grid>
+  }
+</main>

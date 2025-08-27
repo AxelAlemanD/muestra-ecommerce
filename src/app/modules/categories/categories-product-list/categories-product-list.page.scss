@@ -1,0 +1,89 @@
+.categories-product-list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: var(--spacing-normal);
+
+  &__separator {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-normal);
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--spacing-large);
+    border-radius: var(--border-radius);
+    background-color: rgba(var(--color-primary-rgb), 0.2);
+  }
+
+  &__subcategories {
+    width: 100%;
+
+    .force-grid.slide {
+      width: calc(100% / 8) !important;
+
+      @media (max-width: 1000px) {
+        width: calc(100% / 6) !important;
+      }
+
+      @media (max-width: 600px) {
+        width: calc(100% / 3) !important;
+      }
+    }
+  }
+
+  &__filters {
+    flex: 1 1 18%;
+  }
+
+  &__content {
+    flex: 1 1 80%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-normal);
+
+    &--no-content {
+      flex: 1 1 82%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-normal);
+
+      &__image {
+        width: 10rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  app-filters-widget {
+    display: none;
+  }
+}
+
+.btn-whatsapp {
+  width: fit-content;
+  height: fit-content;
+  position: fixed;
+  bottom: 15px;
+  right: 8px;
+  z-index: 1000;
+  padding: 0;
+  opacity: 0.5;
+  transition: all 0.3s ease 0s;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .7));
+
+  &:hover {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  img {
+    width: 56px;
+  }
+}
+
+.mobile-side-filters {
+  display: contents;
+}

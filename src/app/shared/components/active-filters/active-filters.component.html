@@ -1,0 +1,22 @@
+<div class="active-filters">
+    @for (brand of activeBrands; track brand.id) {
+        <app-custom-radio
+            [showCloseIcon]="true"
+            [label]="brand.nombre"
+            [value]="brand.id"
+            [theme]="'light'"
+            [id]="'active-filter-'+brand.id"
+            (onClick)="changeSelectedBrands(brand.id)"
+        ></app-custom-radio>
+    }
+    @if (range) {
+        <app-custom-radio
+            [showCloseIcon]="true"
+            [label]="range"
+            [value]="range"
+            [theme]="'light'"
+            [id]="'active-filter-'+range"
+            (onClick)="resetRange()"
+        ></app-custom-radio>
+    }
+</div>

@@ -1,0 +1,57 @@
+<section class="login">
+  <img class="login__logo" src="assets/images/logo.png" alt="Logotipo Casa Luca">
+  <h1 class="login__title">Inicio de sesión</h1>
+
+  @if (form.errors && form.errors['invalidCredentials']) {
+    <small class="text-danger">
+      Tu correo y/o contraseña son incorrectos
+    </small>
+  }
+
+  <form class="login__form" [formGroup]="form">
+    <app-custom-control
+      formControlName="email"
+      [id]="'email'"
+      [name]="'email'"
+      [label]="'Correo electrónico'"
+      [type]="'email'"
+      [placeholder]="'casaluca@email.com'"
+      [control]="form.controls['email']"
+    ></app-custom-control>
+    <app-custom-control
+      formControlName="password"
+      [id]="'password'"
+      [name]="'password'"
+      [label]="'Contraseña'"
+      [type]="(this.showPassword) ? 'text' : 'password'"
+      [placeholder]="'********'"
+      [control]="form.controls['password']" [button]="{
+        color: 'medium',
+        icon: (this.showPassword) ? 'eye-off' : 'eye'
+      }"
+      (onClickButton)="toggleShowPassword()"
+    ></app-custom-control>
+    <div class="login__additional-actions">
+      <app-custom-checkbox
+        formControlName="remember"
+        [label]="'Recordarme'"
+        [value]="true"
+        [id]="'remember'"
+        [control]="form.controls['remember']"
+      ></app-custom-checkbox>
+      <a class="font-small text-decoration-none" [routerLink]="['/auth/reset-password']">
+        ¿Olvidaste tu contraseña?
+      </a>
+    </div>
+    <app-custom-button
+      [text]="'Iniciar sesión'"
+      [color]="'primary'"
+      [fill]="'solid'"
+      (onClick)="login()"
+    ></app-custom-button>
+    <span class="font-small text-center">
+      ¿No tienes cuenta? <a class="text-primary text-decoration-none" [routerLink]="['/auth/sign-up']">Registrate
+        aquí</a>
+    </span>
+  </form>
+</section>

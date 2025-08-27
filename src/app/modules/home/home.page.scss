@@ -1,0 +1,21 @@
+.btn-whatsapp {
+    width: fit-content;
+    height: fit-content;
+    position: fixed;
+    bottom: 15px;
+    right: 8px;
+    z-index: 1000;
+    padding: 0;
+    opacity: 0.5;
+    transition: all 0.3s ease 0s;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .7));
+
+    &:hover {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    img {
+        width: 56px;
+    }
+}

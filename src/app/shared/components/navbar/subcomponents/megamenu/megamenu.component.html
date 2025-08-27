@@ -1,0 +1,18 @@
+@if (items && items.length) {
+  <div class="megamenu">
+    @for (item of items; track item.link; let isFirst = $first) {
+      <!-- <div class="megamenu__item"> -->
+        <a class="megamenu__link text-primary font-normal fw-bold" [ngClass]="{'mt-0': isFirst}" [routerLink]="item.link">{{ item.label }}</a>
+        @if (item.subitems && item.subitems.length) {
+          <!-- <ul class="megamenu__subitems"> -->
+            @for (subitem of item.subitems; track subitem.link;let isLast = $last) {
+              <li>
+                <a class="megamenu__sublink font-small" [routerLink]="subitem.link">{{ subitem.label }}</a>
+              </li>
+            }
+          <!-- </ul> -->
+        }
+      <!-- </div> -->
+    }
+  </div>
+}

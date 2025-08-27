@@ -1,0 +1,97 @@
+<section class="paginator">
+  <div class="paginator__header">
+    <div class="paginator__details">
+      @if (items && items.length) {
+        <p class="font-small">
+          Mostrando <b>{{ ((currentPage * limit) - limit + 1) }} - {{ (currentPage * limit < total) ? (currentPage * limit) : total }}</b> productos de <b>{{ total }}</b>
+        </p>
+      } @else {
+        <p class="font-small">
+          No hay elementos por mostrar
+        </p>
+      }
+    </div>
+    <app-custom-button
+      class="paginator__mobile-filters"
+      [fill]="'solid'"
+      [color]="'medium'"
+      [icon]="'options'"
+      (onClick)="openSideFilters()"
+    ></app-custom-button>
+    <form class="paginator__controls" [formGroup]="form">
+      <app-custom-select
+        formControlName="order"
+        [id]="'order'"
+        [name]="'order'"
+        [label]="'Ordenar'"
+        [items]="orderOptions"
+        [bindLabel]="'label'"
+        [bindValue]="'value'"
+        [isRequired]="true"
+        [control]="form.controls['order']"
+        (onValueChange)="changeOrder()"
+      ></app-custom-select>
+      <app-custom-select
+        formControlName="limit"
+        [id]="'limit'"
+        [name]="'limit'"
+        [label]="'Mostrar'"
+        [items]="limitOptions"
+        [bindLabel]="'label'"
+        [bindValue]="'value'"
+        [isRequired]="true"
+        [control]="form.controls['limit']"
+        (onValueChange)="changeLimit()"
+      ></app-custom-select>
+    </form>
+  </div>
+  <ng-content></ng-content>
+  <div class="paginator__footer">
+    @if (pages > 1) {
+      <div class="paginator__controls">
+        <app-custom-button
+          [icon]="'chevron-back'"
+          [fill]="'solid'"
+          [color]="'medium'"
+          [isDisabled]="currentPage === 1"
+          (onClick)="changePage(currentPage - 1)"
+        ></app-custom-button>
+
+        @for (page of pagesToShow; track page) {
+          @if (page !== '...') {
+            <app-custom-button
+              [text]="page+''"
+              [fill]="'solid'"
+              [color]="(currentPage == page) ? 'primary' : 'medium'"
+              (onClick)="changePage(page)"
+            ></app-custom-button>
+          } @else {
+            <div class="paginator__separator">
+              <ion-icon name="ellipsis-vertical"></ion-icon>
+            </div>
+          }
+        }
+
+        <app-custom-button
+          [icon]="'chevron-forward'"
+          [fill]="'solid'"
+          [color]="'medium'"
+          [isDisabled]="currentPage === pages"
+          (onClick)="changePage(currentPage + 1)"
+        ></app-custom-button>
+      </div>
+    }
+    <div class="paginator__details">
+      @if (items && items.length) {
+        <p class="font-small">
+          Mostrando <b>{{ ((currentPage * limit) - limit + 1) }} - {{ (currentPage * limit < total) ? (currentPage * limit) : total }}</b> productos de <b>{{ total }}</b>
+        </p>
+      } @else {
+        <p class="font-small">
+          No hay elementos por mostrar
+        </p>
+      }
+    </div>
+  </div>
+  
+</section>

@@ -1,0 +1,171 @@
+@if (cart && productsQuantityInCart) {
+  <main class="checkout">
+    <section class="checkout__container">
+      <app-breadcrumb
+        class="w-100"
+        [items]="breadcrumb"
+      ></app-breadcrumb>
+
+      <div class="checkout__header">
+        <h2 class="font-large fw-bold m-0 text-dark">Checkout</h2>
+        <p class="m-0">Hay {{ productsQuantityInCart }} productos en tu carrito</p>
+      </div>
+
+      <div class="checkout__content">
+        <div class="checkout__products">
+          <app-cart-table
+            [columns]="columns"
+            [cart]="cart"
+          ></app-cart-table>
+        </div>
+        <form class="checkout__details" [formGroup]="form">
+          <div class="card checkout__delivery-type" (click)="openSelectDeliveryTypeModal()">
+            <div class="card__body">
+              <p class="d-flex flex-column m-0">
+                <span>Tipo de entrega</span>
+                @if (form.value['tipo_envio']) {
+                  <strong>{{ form.value['tipo_envio'] | deliveryType }}</strong>
+                } @else {
+                  <strong>Seleccionar tipo de entrega</strong>
+                }
+              </p>
+              <ion-icon name="chevron-forward-outline" class="text-dark"></ion-icon>
+            </div>
+          </div>
+          @if (form.value['tipo_envio'] == DeliveryTypeEnum.DELIVERY) {
+            <div class="card checkout__delivery-address" (click)="openSelectDeliveryAddressModal()">
+              <div class="card__body">
+                <p class="d-flex flex-column m-0">
+                  <span>Dirección de entrega</span>
+                  @if (form.value['direccion_id'] && selectedAddress) {
+                    <strong>{{ selectedAddress.alias }}</strong>
+                    <small>{{ selectedAddress.resumen }}</small>
+                  } @else {
+                    <strong>Seleccionar dirección de entrega</strong>
+                  }
+                </p>
+                <ion-icon name="chevron-forward-outline" class="text-dark"></ion-icon>
+              </div>
+            </div>
+          }
+          <div class="card checkout__payment-method" (click)="openSelectPaymentMethodModal()">
+            <div class="card__body">
+              <p class="d-flex flex-column m-0">
+                <span>Método de pago</span>
+                @if (form.value['forma_pago']) {
+                  <strong>{{ form.value['forma_pago'] | paymentMethod }}</strong>
+                } @else {
+                  <strong>Seleccionar método de pago</strong>
+                }
+              </p>
+              <ion-icon name="chevron-forward-outline" class="text-dark"></ion-icon>
+            </div>
+          </div>
+          <app-custom-control
+            formControlName="coupon"
+            [id]="'coupon'"
+            [name]="'coupon'"
+            [type]="'text'"
+            [placeholder]="'Ingresa código de cupón'"
+            [isDisabled]="this.cart && this.cart.cupon != undefined"
+            [button]="{
+              color: 'primary',
+              text: (this.cart && this.cart.cupon != undefined) ? 'Remover cupon' : 'Aplicar cupón'
+            }"
+            [buttonAlwaysEnabled]="true"
+            (onClickButton)="(this.cart && !this.cart.cupon)
+            ? applyCoupon()
+            : removeCoupon()"
+          ></app-custom-control>
+          <div class="card checkout__summary">
+            <div class="card__header">
+              <strong>Resumen de compra</strong>
+            </div>
+            <div class="card__body">
+              <table>
+                <tr>
+                  <td>
+                    <small>Subtotal</small>
+                  </td>
+                  <td class="text-end">
+                    <small> {{ cart!.subtotal | currency:"MXN":"symbol" }} </small>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <small>Descuento</small>
+                  </td>
+                  <td class="text-end">
+                    <small> - {{ cart.descuento | currency:"MXN":"symbol" }} </small>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <small>Cupones</small>
+                  </td>
+                  <td class="text-end">
+                    <small> - {{ (cart!.cupon ? cart!.cupon.cantidad_descuento : 0) | currency:"MXN":"symbol" }} </small>
+                  </td>
+                </tr>
+                <tr>
+                  @if (!form.value['tipo_envio'] || (form.value['tipo_envio'] === DeliveryTypeEnum.DELIVERY && !form.value['direccion_id'])) {
+                    <td colspan="2" class="d-flex align-items-center gap-2">
+                      <ion-icon name="alert-circle" class="text-secondary"></ion-icon>
+                      <small class="text-secondary">El costo de envío se calcula al seleccionar una dirección</small>
+                    </td>
+                  } @else {
+                    <td>
+                      <small>Envio</small>
+                    </td>
+                    <td class="text-end">
+                      @if (isLoadingShippingCost) {
+                      <span class="loader"></span>
+                      } @else {
+                        @if (cart!.costo_envio) {
+                          <small> + {{ cart!.costo_envio | currency:"MXN":"symbol" }} </small>
+                        } @else {
+                          <small class="text-success"> GRATIS </small>
+                        }
+                      }
+                    </td>
+                  }
+                </tr>
+                <tr>
+                  <td>
+                    <small class="fw-bold">Total</small>
+                  </td>
+                  <td class="text-end">
+                    <small class="text-primary fw-bold"> {{ cart!.total | currency:"MXN":"symbol" }} </small>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="card__footer">
+              <app-custom-button
+                [text]="'Confirmar compra'"
+                [color]="'primary'"
+                [fill]="'solid'"
+                [isLoading]="isLoading"
+                [isDisabled]="!form.valid || (form.value['tipo_envio'] === DeliveryTypeEnum.DELIVERY && !form.value['direccion_id'])"
+                (onClick)="(form.value['forma_pago'] === PaymentMethodEnum.CARD)
+                  ? openAddPaymentCardModal()
+                  : confirmPurchase()
+                "
+              ></app-custom-button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+} @else {
+  <main class="checkout--no-items">
+    <h3 class="font-large">Parece que no tienes ningún producto en tu carrito</h3>
+    <app-custom-button
+      [text]="'Explorar catálogo'"
+      [color]="'primary'"
+      [fill]="'solid'"
+      (onClick)="redirectTo('/productos')"
+    ></app-custom-button>
+  </main>
+}

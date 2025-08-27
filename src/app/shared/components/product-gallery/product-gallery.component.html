@@ -1,0 +1,48 @@
+@if (medias.length && activeMedia) {
+  <div class="product-gallery">
+    <div class="product-gallery__main">
+      <ngx-slick-carousel
+        class="carousel" 
+        #mainOwlCarousel="slick-carousel" 
+        [config]="mainOptions"
+      >
+        @for (media of medias; track media.id) {
+          <div ngxSlickItem class="slide" [id]="media.id +''" class="product-gallery__item" [ngClass]="{'product-gallery__item--active': media.id == activeMedia.id}">
+            <img appLazyImage="{{ media.media_url | uploads }}" [alt]="media.media_url">
+          </div>
+        }
+      </ngx-slick-carousel>
+    </div>
+    <div class="product-gallery__thumbnails">
+      <app-custom-button
+        class="product-gallery__thumbnails-action-left"
+        [icon]="'arrow-back'"
+        [fill]="'solid'"
+        [color]="'light'"
+        [isDisabled]="this.currentIndex == 0"
+        (onClick)="changeByIndex(this.currentIndex - 1)"
+      ></app-custom-button>
+      <app-custom-button
+        class="product-gallery__thumbnails-action-right"
+        [icon]="'arrow-forward'"
+        [fill]="'solid'"
+        [color]="'light'"
+        [isDisabled]="this.currentIndex == medias.length - 1"
+        (onClick)="changeByIndex(this.currentIndex + 1)"
+      ></app-custom-button>
+      @if (thumbnailOptions) {
+        <ngx-slick-carousel
+          class="carousel" 
+          #thumbnailsOwlCarousel="slick-carousel" 
+          [config]="thumbnailOptions"
+        >
+          @for (media of medias; track media.id) {
+            <div ngxSlickItem class="slide" [id]="media.id +''" class="product-gallery__item" [ngClass]="{'product-gallery__item--active': media.id == activeMedia.id}" (click)="changeActiveMedia(media)">
+              <img appLazyImage="{{ media.media_url | uploads }}" [alt]="media.media_url">
+            </div>
+          }
+        </ngx-slick-carousel>
+      }
+    </div>
+  </div>
+}

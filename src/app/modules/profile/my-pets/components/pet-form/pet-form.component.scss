@@ -1,0 +1,57 @@
+.pet-form {
+    padding-inline: calc(var(--spacing-extra-large) * 6);
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-normal);
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--spacing-normal);
+    }
+
+    &__image {
+        cursor: pointer;
+        width: 6rem;
+        height: 6rem;
+        border-radius: var(--border-radius);
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+        }
+
+        &__input {
+            cursor: pointer;
+            height: fit-content;
+
+            &__container {
+                display: flex;
+                flex-direction: column;
+                gap: var(--spacing-small);
+                align-self: flex-start;
+            }
+        }
+
+        &--unset {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed rgba(var(--color-dark-rgb), 0.5);
+
+            ion-icon {
+                font-size: var(--font-size-subtitle);
+                color: rgba(var(--color-dark-rgb), 0.5);
+            }
+        }
+    }
+
+    @media (max-width: 1024px) {
+        padding-inline: var(--spacing-extra-small);
+    }
+}

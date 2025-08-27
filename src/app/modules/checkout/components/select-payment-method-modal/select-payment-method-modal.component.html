@@ -1,0 +1,17 @@
+<app-modal-base
+  [title]="'Método de pago'"
+  [confirmBtnText]="'Guardar selección'"
+  (onConfirm)="confirmSelected()"
+>
+  <form class="select-payment-method" [formGroup]="form">
+    @for (option of options; track option.id) {
+      <app-custom-radio-item
+        formControlName="option"
+        [id]="'option-'+option.id"
+        [radioValue]="option.id"
+        [title]="option.label"
+        [control]="form.controls['option']"
+      ></app-custom-radio-item>
+    }
+  </form>
+</app-modal-base>
